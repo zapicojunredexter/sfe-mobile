@@ -87,15 +87,15 @@ class App extends PureComponent<Props> {
   persistor: Object;
 
   render() {
-    if (!appEnv) {
-      console.error(
-        new Error(
-          'Environment is not selected. You need to type "source appcenter-post-clone.sh <ENV>" on project root before build.',
-        ),
-      );
+    // if (!appEnv) {
+    //   console.error(
+    //     new Error(
+    //       'Environment is not selected. You need to type "source appcenter-post-clone.sh <ENV>" on project root before build.',
+    //     ),
+    //   );
 
-      return null;
-    }
+    //   return null;
+    // }
     return (
       // <ComponentLayoutViewer>
       <Provider store={this.store}>
