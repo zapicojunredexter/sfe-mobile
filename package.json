@@ -9,8 +9,7 @@
     "eslint": "eslint",
     "prettier": "prettier",
     "react-devtool": "react-devtools",
-    "redux-devtool": "remotedev",
-    "precommit": "lint-staged"
+    "redux-devtool": "remotedev"
   },
   "dependencies": {
     "core-js": "^2.5.7",
