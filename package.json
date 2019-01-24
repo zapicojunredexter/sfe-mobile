@@ -16,22 +16,6 @@
     "log:ios": "react-native log-ios",
     "fmt": "prettier --config .prettierrc.yml --write \"{!(node_modules),!(__mock__)/**/}*.{jsx,js,json,md,ts}\""
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.{jsx,js}": [
-      "flow focus-check",
-      "eslint --fix",
-      "git add"
-    ],
-    "*.{jsx,js,json,md,ts}": [
-      "prettier --write",
-      "git add"
-    ]
-  },
   "dependencies": {
     "core-js": "^2.6.0",
     "moment": "^2.22.2",
