@@ -1,7 +1,0 @@
-# Contributing
-
-When contributing to this repository, please first discuss the change you wish to make before making a change.
-
-## Pull Request Process
-
-1.

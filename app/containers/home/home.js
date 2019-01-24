@@ -1,22 +1,34 @@
-import React, { PureComponent } from 'react';
-import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
+import React from 'react';
 import { connect } from 'react-redux';
-import { Button } from 'react-native';
+import {
+  SectionList,
+  Text,
+  Button,
+  View,
+  // CameraRoll,
+} from 'react-native';
 
-class Home extends PureComponent<Props> {
+type Props = {
+};
+
+
+class Home extends React.Component<Props> {
   render() {
-    console.log('RENDERED', this.props);
     return (
-      <View style={{backgroundColor : 'red'}}>
-        <Button title="asd" />
+      <View
+      >
+        <Text>home</Text>
+        <Button title="navigate" onPress={() =>
+            {
+                console.log("HOOOY");
+                this.props.navigation.navigate('Login');
+            }} />
       </View>
     );
   }
 }
-
-const mapStateToProps = state => ({
+const mapStateToProps = store => ({
 });
-
 const mapDispatchToProps = dispatch => ({
 });
 
