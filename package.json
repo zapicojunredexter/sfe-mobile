@@ -12,14 +12,6 @@
     "redux-devtool": "remotedev",
     "precommit": "lint-staged"
   },
-  "lint-staged": {
-    "*.js": [
-      "flow focus-check",
-      "eslint --fix",
-      "git add"
-    ],
-    "app/modules/infrastructures/**": "jest __tests__/infrastructures"
-  },
   "dependencies": {
     "core-js": "^2.5.7",
     "immutable": "^3.8.2",
