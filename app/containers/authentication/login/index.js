@@ -15,7 +15,7 @@ class Login extends React.Component<Props> {
     return (
       <View
       >
-        <Text>Login</Text>
+        <Text>You are in LOGIN PAGE</Text>
         <Button title="Registration" onPress={() => this.props.navigation.navigate('Registration')}/>
         <Button title="Home" onPress={() => this.props.navigation.navigate('Home')}/>
       </View>

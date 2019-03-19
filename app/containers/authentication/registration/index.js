@@ -14,7 +14,7 @@ class Registration extends React.Component<Props> {
   render() {
     return (
       <View>
-        <Text>Registration</Text>
+        <Text>You are in REGISTRATION PAGE</Text>
       </View>
     );
   }

@@ -4,4 +4,4 @@ import { AppRegistry } from 'react-native';
 import 'react-native-console-time-polyfill';
 import Root from './app/root';
 
-AppRegistry.registerComponent('SecuLace', () => Root);
+AppRegistry.registerComponent('RNPlatform', () => Root);

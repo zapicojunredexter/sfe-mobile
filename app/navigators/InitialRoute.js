@@ -1,18 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-  SectionList,
   Text,
-  Button,
   View,
-  // CameraRoll,
 } from 'react-native';
 
 type Props = {
 };
 
 
-class Home extends React.Component<Props> {
+class InitialRoute extends React.Component<Props> {
     constructor(props){
         super(props);
         const { navigation } = props;
@@ -35,4 +32,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(Home);
+)(InitialRoute);

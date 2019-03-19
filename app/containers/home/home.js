@@ -15,14 +15,9 @@ type Props = {
 class Home extends React.Component<Props> {
   render() {
     return (
-      <View
-      >
-        <Text>home</Text>
-        <Button title="navigate" onPress={() =>
-            {
-                console.log("HOOOY");
-                this.props.navigation.navigate('Login');
-            }} />
+      <View>
+        <Text>You are in HOME PAGE</Text>
+        <Button title="navigate" onPress={() => this.props.navigation.navigate('Login')} />
       </View>
     );
   }
