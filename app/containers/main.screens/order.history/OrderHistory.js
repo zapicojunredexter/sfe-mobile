@@ -1,23 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-  SectionList,
   Text,
-  Button,
   View,
-  // CameraRoll,
+  Button,
 } from 'react-native';
 
-type Props = {
-};
-
-
-class Home extends React.Component<Props> {
+class Container extends React.Component<> {
   render() {
     return (
-      <View>
-        <Text>You are in HOME PAGE</Text>
-        <Button title="navigate" onPress={() => this.props.navigation.navigate('Login')} />
+      <View
+      >
+      <Text>src/containers/main.screens/order.history/index.js</Text>
+        <Button title="Go To Order Details" onPress={() => {this.props.navigation.navigate('OrderHistoryDetails')}}/>
       </View>
     );
   }
@@ -30,4 +25,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(Home);
+)(Container);

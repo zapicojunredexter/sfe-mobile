@@ -28,7 +28,7 @@ class Listeners extends React.Component<Props, State> {
     AppState.removeEventListener('change', this.handleAppStateChange);
   }
 
-  handleBackButton = () => true;
+  handleBackButton = () => { alert('OKS');return true};
 
   handleAppStateChange = (nextAppState: { match: Function }) => {
     if (

@@ -12,9 +12,8 @@ import combineReducers, {
 
 const RootNavigator = StackNavigator;
 
-type Props = {};
-export default class Root extends Component<Props> {
-  constructor(props: Props) {
+export default class Root extends Component<> {
+  constructor(props) {
     super(props);
     NavigationReducer.init(RootNavigator, 'InitialRoute');
   }

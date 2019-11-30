@@ -3,18 +3,19 @@ import { connect } from 'react-redux';
 import {
   Text,
   View,
+  Button,
 } from 'react-native';
 
-class InitialRoute extends React.Component<> {
-    constructor(props){
-        super(props);
-        const { navigation } = props;
-        navigation.navigate('Stores');
-    }
+class Container extends React.Component<> {
+    static navigationOptions = {
+        headerTitle : 'profile/index.js',
+    };
     render() {
         return (
-            <View>
-                <Text>INITIAL ROUTE</Text>
+            <View
+            >
+                <Text>src/containers/main.screens/profile/index.js</Text>
+                <Button title="Click" onPress={() => {}}/>
             </View>
         );
     }
@@ -27,4 +28,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(InitialRoute);
+)(Container);

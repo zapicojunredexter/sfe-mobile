@@ -6,15 +6,13 @@ import {
   Button,
 } from 'react-native';
 
-type Props = {
-};
-
-
-class Registration extends React.Component<Props> {
+class Container extends React.Component<> {
   render() {
     return (
-      <View>
-        <Text>You are in REGISTRATION PAGE</Text>
+      <View
+      >
+      <Text>src/containers/main.screens/stores/index.js</Text>
+        <Button title="Click" onPress={() => {}}/>
       </View>
     );
   }
@@ -27,4 +25,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(Registration);
+)(Container);
