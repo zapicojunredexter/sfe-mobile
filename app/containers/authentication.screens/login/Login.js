@@ -5,6 +5,7 @@ import {
   View,
   Button,
 } from 'react-native';
+import UserActions from '../../../reducers/user/user.action';
 
 class Login extends React.Component<> {
     static navigationOptions = {
@@ -16,7 +17,9 @@ class Login extends React.Component<> {
       >
         <Text>You are in LOGIN PAGE</Text>
         <Button title="Registration" onPress={() => this.props.navigation.navigate('Registration')}/>
-        <Button title="LOGIN" onPress={() => this.props.navigation.navigate('Home')}/>
+        <Button title="LOGIN" onPress={() => {
+            this.props.setUserId('SAMPLE_USER_ID');
+            this.props.navigation.navigate('Home')}}/>
       </View>
     );
   }
@@ -24,6 +27,7 @@ class Login extends React.Component<> {
 const mapStateToProps = store => ({
 });
 const mapDispatchToProps = dispatch => ({
+    setUserId: userId => dispatch(UserActions.setUserId(userId)),
 });
 
 export default connect(

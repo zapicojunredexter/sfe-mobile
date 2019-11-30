@@ -43,7 +43,7 @@ class DrawerComponent extends React.PureComponent<> {
                             source={{}}
                         />
                     </View>
-                    <Text style={{color: 'white',fontWeight: 'bold', fontSize: 15}}>/navigators/drawer.js</Text>
+                    <Text style={{color: 'white',fontWeight: 'bold', fontSize: 15}}>{this.props.userId}</Text>
                 </View>
                 <SafeAreaView forceInset={{ top: 'always', horizontal: 'never' }}>
                     <DrawerItems
@@ -76,6 +76,7 @@ class DrawerComponent extends React.PureComponent<> {
 
 
 const mapStateToProps = store => ({
+    userId: store.userStore.userId
 });
 const mapDispatchToProps = dispatch => ({
 });

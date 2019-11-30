@@ -1,13 +1,13 @@
 import NavigationReducer from '../modules/navigation.with.redux/navigation.reducer';
-import SystemRecord from './system/system.record';
 import SystemReducer from './system/system.reducer';
+import UserReducer from './user/user.reducer';
+export const immutableRecords = [];
 
-export const immutableRecords = [SystemRecord];
-
-export const persistedList = ['system'];
+export const persistedList = ['userStore'];
 
 export default {
-  system: SystemReducer.reducer,
+  systemStore: SystemReducer.reducer,
+  userStore: UserReducer.reducer,
   navigation: NavigationReducer.reducer,
 //   memos: MemosReducer.reducer,
 //   filters: FiltersReducer.reducer,

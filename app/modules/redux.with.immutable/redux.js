@@ -27,10 +27,6 @@ type Props = {
 const logger = createLogger({
   stateTransformer: state =>
     Object.keys(state).reduce((newState, key) => {
-      if (Immutable.Iterable.isIterable(state[key])) {
-        return { ...newState, [key]: state[key].toJS() };
-      }
-
       return { ...newState, [key]: state[key] };
     }, {}),
 });
@@ -47,8 +43,6 @@ export default class ReduxProvider extends Component<Props> {
 
     this.persistConfig = {
       key: rootConfigKey,
-      stateReconciler: autoMergeLevel2Immutable,
-      transforms: [immutableTransform({ records: immutableRecords })],
       storage: AsyncStorage,
       whitelist: props.persistedList,
       debug: true,
