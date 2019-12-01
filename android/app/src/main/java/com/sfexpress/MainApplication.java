@@ -1,4 +1,4 @@
-package com.rnplatform;
+package com.sfexpress;
 
 import android.app.Application;
 
