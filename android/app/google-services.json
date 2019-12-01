@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "83846861839",
+    "firebase_url": "https://streetfood-express.firebaseio.com",
+    "project_id": "streetfood-express",
+    "storage_bucket": "streetfood-express.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:83846861839:android:9cf57cf612393a44ffbf7a",
+        "android_client_info": {
+          "package_name": "com.rnplatform"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "83846861839-asfnbliditthk7ges55igrbc1d993jh1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApq3Bq7FnUxQ1s8PBtZ1yksdPJQA1yLKY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "83846861839-asfnbliditthk7ges55igrbc1d993jh1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
