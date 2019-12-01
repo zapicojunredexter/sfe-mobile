@@ -11,8 +11,7 @@ class InitialRoute extends React.Component<> {
         const { navigation, userType } = props;
         if(userType === 'store') {
             navigation.navigate('Profile');
-        }
-        if(userType === 'customer') {
+        } else {
             navigation.navigate('Stores');
         }
     }
