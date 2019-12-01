@@ -1,16 +1,16 @@
 import {
-    SET_USER_ID
+    SET_USER
 } from './user.action';
 
 const initialState = {
-    userId: null,
+    user: null,
 };
 
 class UserReducer {
     reducer = (state = initialState, action ) => {
         switch (action.type) {
-            case SET_USER_ID: {
-                return {...state, userId: action.userId};
+            case SET_USER: {
+                return {...state, user: action.user};
             }
             default: {
                 return state;

@@ -8,7 +8,7 @@ import OrderHistoryDetails from '../containers/main.screens/order.history/OrderH
 import Stores from '../containers/main.screens/stores/Stores';
 import Login from '../containers/authentication.screens/login/Login';
 import Registration from '../containers/authentication.screens/registration/Registration';
-import Drawer from './Drawer';
+import Drawer from './drawer';
 const AuthenticationStack = createStackNavigator({
     Login : {
         screen : Login,

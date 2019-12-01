@@ -8,8 +8,13 @@ import {
 class InitialRoute extends React.Component<> {
     constructor(props){
         super(props);
-        const { navigation } = props;
-        navigation.navigate('Stores');
+        const { navigation, userType } = props;
+        if(userType === 'store') {
+            navigation.navigate('Profile');
+        }
+        if(userType === 'customer') {
+            navigation.navigate('Stores');
+        }
     }
     render() {
         return (
@@ -20,6 +25,7 @@ class InitialRoute extends React.Component<> {
     }
 }
 const mapStateToProps = store => ({
+    userType: store.userStore.user && store.userStore.user.type,
 });
 const mapDispatchToProps = dispatch => ({
 });

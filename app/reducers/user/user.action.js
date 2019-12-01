@@ -1,10 +1,10 @@
-export const SET_USER_ID = 'SET_USER_ID';
+export const SET_USER = 'SET_USER';
 
 class UserAction {
-    setUserId = userId => dispatch => 
+    setUser = user => dispatch => 
         dispatch({
-            type : SET_USER_ID,
-            userId
+            type : SET_USER,
+            user
         });
 }
 

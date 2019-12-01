@@ -2,12 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createStackNavigator, createDrawerNavigator, SafeAreaView, DrawerItems } from 'react-navigation';
 import { View, TouchableOpacity, Text, ScrollView, Image } from 'react-native';
+import UserAction from '../reducers/user/user.action';
 
 const screens = {
-    'vendor' : {
+    'store' : {
         'Profile' : true,
         'OrderHistory' : true,
-        'Stores' : true,
     },
     'customer' : {
         'Profile' : true,
@@ -22,10 +22,9 @@ class DrawerComponent extends React.PureComponent<> {
     }
 
     render() {
-        const { items } = this.props;
-        const userType = 'vendor';
+        const { items, userType, userId } = this.props;
         const filteredItems = (userType) ? items.filter((item, index) => screens[userType][item.key]) : [];
-        
+        const isLoggedIn = userId;
         return (
             <ScrollView>
                 <View style={{width:'100%',backgroundColor : '#147DAD',padding:20, alignItems:'center'}}>
@@ -52,7 +51,15 @@ class DrawerComponent extends React.PureComponent<> {
                         activeTintColor="white"
                         inactiveTintColor="white"
                     />
-                    <View style={{marginLeft: 5, marginRight: 5, marginTop: 20, marginBottom: 20, borderColor: 'gray', borderTopWidth: 0.5}}/>
+                    <View
+                        style={{
+                            marginLeft: 5,
+                            marginRight: 5,
+                            marginTop: 20,
+                            marginBottom: 20,
+                            borderColor: 'gray',
+                            borderTopWidth: isLoggedIn ? 0.5 : 0,
+                        }}/>
                     <TouchableOpacity
                         style={{padding: 10,paddingLeft: 15}}
                         onPress={() => alert('TODO: terms and conditions')}
@@ -62,11 +69,14 @@ class DrawerComponent extends React.PureComponent<> {
                     <TouchableOpacity
                         style={{padding: 5,paddingLeft: 15}}
                         onPress={() => {
+                                this.props.logout();
                                 this.props.navigation.navigate('Login');
                             }
                         }
                     >
-                        <Text style={{color: 'white'}}>Logout</Text>
+                        <Text style={{color: 'white'}}>
+                            {isLoggedIn ? `Logout` : `Login`}
+                        </Text>
                     </TouchableOpacity>
                 </SafeAreaView>
             </ScrollView>
@@ -76,9 +86,11 @@ class DrawerComponent extends React.PureComponent<> {
 
 
 const mapStateToProps = store => ({
-    userId: store.userStore.userId
+    userId: store.userStore.user && store.userStore.user.id,
+    userType: store.userStore.user && store.userStore.user.type,
 });
 const mapDispatchToProps = dispatch => ({
+    logout: () => dispatch(UserAction.setUser(null)),
 });
 
 export default connect(
