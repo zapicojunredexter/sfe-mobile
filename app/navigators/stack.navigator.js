@@ -6,6 +6,9 @@ import Profile from '../containers/main.screens/profile/Profile';
 import OrderHistory from '../containers/main.screens/order.history/OrderHistory';
 import OrderHistoryDetails from '../containers/main.screens/order.history/OrderHistoryDetails';
 import Stores from '../containers/main.screens/stores/Stores';
+import Feedbacks from '../containers/main.screens/feedbacks/Feedbacks';
+import StoreDetails from '../containers/main.screens/stores/StoreDetails';
+import ConfirmOrder  from '../containers/main.screens/stores/ConfirmOrder';
 import Login from '../containers/authentication.screens/login/Login';
 import Registration from '../containers/authentication.screens/registration/Registration';
 import Drawer from './drawer';
@@ -39,7 +42,11 @@ const createStackWithNotifIcon = (screens) =>
 
 const MainStack = createDrawerNavigator({
     Stores: {
-        screen: createStackWithNotifIcon({Stores}),
+        screen: createStackWithNotifIcon({
+            Stores,
+            StoreDetails,
+            ConfirmOrder,
+        }),
         navigationOptions: {
             drawerLabel: 'Stores',
             // drawerIcon: () => (
@@ -51,6 +58,15 @@ const MainStack = createDrawerNavigator({
         screen: createStackWithNotifIcon({Profile}),
         navigationOptions: {
             drawerLabel: 'ProFile',
+            // drawerIcon: () => (
+            //     <Entypo name="home" size={20} color="#fff" />
+            // ),
+        },
+    },
+    Feedbacks: {
+        screen: createStackWithNotifIcon({Feedbacks}),
+        navigationOptions: {
+            drawerLabel: 'Feedbacks',
             // drawerIcon: () => (
             //     <Entypo name="home" size={20} color="#fff" />
             // ),

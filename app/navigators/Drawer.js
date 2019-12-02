@@ -8,6 +8,7 @@ const screens = {
     'store' : {
         'Profile' : true,
         'OrderHistory' : true,
+        'Feedbacks': true
     },
     'customer' : {
         'Profile' : true,

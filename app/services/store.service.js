@@ -28,6 +28,17 @@ export default class {
         }
     }
 
+    static get = () => async (dispatch, getState) => {
+        try {
+            const result = await collection.get();
+            const data = result.docs.map(doc => ({id: doc.id, ...data}));
+
+            return data;
+        } catch (err) {
+            throw err;
+        }
+    }
+
     static createListener = (callback = () => {}, query) => {
         return collection.onSnapshot((result) => {
             const data = result.docs.map(data => ({id: data.id, ...data.data()}));
