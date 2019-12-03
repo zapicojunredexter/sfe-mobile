@@ -13,9 +13,11 @@ class Container extends React.Component<> {
         headerLeft: <HeaderBackButton onPress={() => navigation.goBack(null)} />,
     })
     render() {
+        const order = this.props.navigation.state && this.props.navigation.state.params;
         return (
             <View>
                 <Text>src/containers/main.screens/order.history/OrderHistoryDetails.js</Text>
+                <Text>{JSON.stringify(order)}</Text>
                 <Button title="Click" onPress={() => {}}/>
             </View>
         );
