@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { HeaderBackButton } from 'react-navigation';
 import ProductsService from '../../../services/products.service';
+import CartActions from '../../../reducers/cart/cart.action';
 
 
 class Container extends React.Component<> {
@@ -35,28 +36,40 @@ class Container extends React.Component<> {
         return (
             <View>
                 <Text>src/containers/main.screens/stores/StoreDetails.js</Text>
-                <Text>{JSON.stringify(store)}</Text>
-
+                <Text style={{marginTop: 15}}>STORE DETAILS: {JSON.stringify(store)}</Text>
+                <Text style={{marginTop: 15}}>PRODUCTS: </Text>
                 <FlatList
                     data={this.state.products}
-                    renderItem={({item}) => (
-                        <TouchableOpacity
-                            onPress={() => {
-                                alert(`adding to card ${JSON.stringify(item)}`);
-                            }}
-                        >
-                            <Text> - {JSON.stringify(item)}</Text>
-                        </TouchableOpacity>
-                    )}
+                    extraData={this.props.cartItems}
+                    renderItem={({item}) => {
+                        const isInCart = !!this.props.cartItems[item.id];
+                        return (
+                            <TouchableOpacity
+                                onPress={() => {
+                                    if(isInCart) {
+                                        this.props.remoteFromCart(item.id);
+                                    } else {
+                                        this.props.addCartItem(item);
+                                    }
+                                }}
+                            >
+                                <Text> - {JSON.stringify(item)}</Text>
+                            </TouchableOpacity>
+                        );
+                    }}
                 />
+                <Text style={{marginTop: 15}}>CART ITEMS : {JSON.stringify(this.props.cartItems)}</Text>
                 <Button title="Go to Confirm Order" onPress={() => this.props.navigation.navigate('ConfirmOrder')}/>
             </View>
         );
     }
 }
 const mapStateToProps = store => ({
+    cartItems: store.cartStore.cartItems
 });
 const mapDispatchToProps = dispatch => ({
+    addCartItem: item => dispatch(CartActions.addCartItem(item)),
+    remoteFromCart: itemId => dispatch(CartActions.removeCartItem(itemId)),
 });
 
 export default connect(

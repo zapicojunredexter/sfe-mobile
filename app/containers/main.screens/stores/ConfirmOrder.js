@@ -11,7 +11,7 @@ import ConfirmOrderModal from './modals/ConfirmOrderModal';
 
 class Container extends React.Component<> {
     static navigationOptions = ({ navigation }) => ({
-        headerLeft: <HeaderBackButton onPress={() => navigation.goBack(null)} />,
+        headerLeft: <HeaderBackButton onPress={() => navigation.pop(2)} />,
     })
     state = {
         isConfirming: false,
