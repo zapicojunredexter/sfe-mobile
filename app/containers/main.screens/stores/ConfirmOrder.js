@@ -18,7 +18,7 @@ class Container extends React.Component<> {
     };
     render() {
         return (
-            <View>
+            <View style={{flex: 1}}>
                 <Text>src/containers/main.screens/stores/ConfirmOrder.js</Text>
                 <Button title="Confirm Order" onPress={() => this.setState({isConfirming: true})}/>
                 <ConfirmOrderModal
