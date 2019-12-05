@@ -7,6 +7,7 @@ import {
   FlatList,
   TouchableOpacity,
 } from 'react-native';
+import ImagePicker from 'react-native-image-picker';
 import StoreService from '../../../services/store.service';
 
 class Container extends React.Component<> {
@@ -20,11 +21,42 @@ class Container extends React.Component<> {
             })
             .catch(err => alert(err.message));
     }
+    chooseFile = () => {
+        var options = {
+          title: 'Select Image',
+          customButtons: [
+            { name: 'customOptionKey', title: 'Choose Photo from Custom Option' },
+          ],
+          storageOptions: {
+            skipBackup: true,
+            path: 'images',
+          },
+        };
+        ImagePicker.showImagePicker(null, response => {
+          console.log('Response = ', response);
+     
+          if (response.didCancel) {
+            console.log('User cancelled image picker');
+          } else if (response.error) {
+            console.log('ImagePicker Error: ', response.error);
+          } else if (response.customButton) {
+            console.log('User tapped custom button: ', response.customButton);
+            alert(response.customButton);
+          } else {
+            let source = response;
+            // You can also display the image using data:
+            // let source = { uri: 'data:image/jpeg;base64,' + response.data };
+            this.setState({
+              filePath: source,
+            });
+          }
+        });
+      };
     render() {
         return (
             <View>
                 <Text>src/containers/main.screens/stores/index.js</Text>
-                
+                <Button title="Choose File" onPress={this.chooseFile} />
                 <FlatList
                     data={this.state.stores}
                     renderItem={({item}) => (

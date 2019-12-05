@@ -149,6 +149,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-image-picker')
     // This should be here already
     implementation project(':react-native-firebase')
 
