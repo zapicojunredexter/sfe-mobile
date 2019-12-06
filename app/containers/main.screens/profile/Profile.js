@@ -12,8 +12,7 @@ class Container extends React.Component<> {
     };
     render() {
         return (
-            <View
-            >
+            <View>
                 <Text>src/containers/main.screens/profile/index.js</Text>
                 <Button title="Click" onPress={() => {}}/>
             </View>

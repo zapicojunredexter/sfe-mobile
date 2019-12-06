@@ -26,10 +26,12 @@ class Container extends React.Component<> {
 
     componentDidMount(){
         const store = this.props.navigation.state && this.props.navigation.state.params;
-        this.setState({store});
-        this.listener = ProductsService.createStoreProductsListener(store.id, (data) => {
-            this.setState({products: data});
-        });
+        if(store){
+            this.setState({store});
+            this.listener = ProductsService.createStoreProductsListener(store.id, (data) => {
+                this.setState({products: data});
+            });
+        }
     }
     render() {
         const { store } = this.state;
