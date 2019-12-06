@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 import { HeaderBackButton } from 'react-navigation';
+import ProductsServices from '../../../services/products.service';
 
 
 class Container extends React.Component<> {
@@ -37,19 +38,39 @@ class Container extends React.Component<> {
         });
     };
 
+    submitProduct = () => {
+        const payload = {
+            name: `sample product ${new Date().getTime()}`,
+            store: {
+                id: this.props.userId,
+            },
+        };
+        this.props.addStoreProduct(payload)
+            .then(() => {
+                alert('successfully added product');
+                this.props.navigation.goBack(null);
+            })
+            .catch(err => alert(err.message));
+    }
+
     render() {
         return (
             <View>
                 <Text>src/containers/main.screens/products/AddProduct.js</Text>
                 <Button title="ADD IMAGE" onPress={this.addFile}/>
-                <Button title="SUBMIT" onPress={() => {}}/>
+                <Button
+                    title="SUBMIT"
+                    onPress={this.submitProduct}
+                />
             </View>
         );
     }
 }
 const mapStateToProps = store => ({
+    userId: store.userStore.user && store.userStore.user.id,
 });
 const mapDispatchToProps = dispatch => ({
+    addStoreProduct: product => dispatch(ProductsServices.add(product)),
 });
 
 export default connect(

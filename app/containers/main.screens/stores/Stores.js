@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import StoreService from '../../../services/store.service';
+import CartActions from '../../../reducers/cart/cart.action';
 
 class Container extends React.Component<> {
     state = {

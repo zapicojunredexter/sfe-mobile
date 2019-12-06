@@ -2,9 +2,11 @@ import {
     ADD_CART_ITEM,
     CLEAR_CART,
     REMOVE_CART_ITEM,
+    SET_STORE,
 } from './cart.action';
 
 const initialState = {
+    store: null,
     cartItems: {
     },
 };
@@ -12,6 +14,12 @@ const initialState = {
 class UserReducer {
     reducer = (state = initialState, action ) => {
         switch (action.type) {
+            case SET_STORE: {
+                return {
+                    ...state,
+                    store: action.store
+                };
+            }
             case ADD_CART_ITEM: {
                 return {
                     ...state,

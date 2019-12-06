@@ -28,6 +28,17 @@ export default class {
         }
     }
 
+    static update = (id, params) => async (dispatch, getState) => {
+        try {
+            await collection.doc(id).update({
+                ...params,
+                updatedAtMs: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        } catch (err) {
+            throw err;
+        }
+    }
+
     static createListener = (callback = () => {}, query) => {
         return collection.onSnapshot((result) => {
             const data = result.docs.map(data => ({id: data.id, ...data.data()}));

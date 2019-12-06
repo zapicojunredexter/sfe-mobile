@@ -28,10 +28,21 @@ export default class {
         }
     }
 
+    static update = (id, params) => async (dispatch, getState) => {
+        try {
+            await collection.doc(id).update({
+                ...params,
+                updatedAtMs: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        } catch (err) {
+            throw err;
+        }
+    }
+
     static get = () => async (dispatch, getState) => {
         try {
             const result = await collection.get();
-            const data = result.docs.map(doc => ({id: doc.id, ...data}));
+            const data = result.docs.map(doc => ({id: doc.id, ...doc.data()}));
 
             return data;
         } catch (err) {
@@ -42,7 +53,7 @@ export default class {
     static fetchStoreProducts = (storeId) => async (dispatch, getState) => {
         try {
             const result = await collection.where('store.id','==',storeId).get();
-            const data = result.docs.map(doc => ({id: doc.id, ...data}));
+            const data = result.docs.map(doc => ({id: doc.id, ...doc.data()}));
             return data;
         } catch (err) {
             throw err;
