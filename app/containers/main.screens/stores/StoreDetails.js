@@ -55,7 +55,7 @@ class Container extends React.Component<> {
                             <TouchableOpacity
                                 onPress={() => {
                                     if(isInCart) {
-                                        this.props.remoteFromCart(item.id);
+                                        this.props.removeFromCart(item.id);
                                     } else {
                                         this.props.addCartItem(item);
                                     }
@@ -77,7 +77,7 @@ const mapStateToProps = store => ({
 });
 const mapDispatchToProps = dispatch => ({
     addCartItem: item => dispatch(CartActions.addCartItem(item)),
-    remoteFromCart: itemId => dispatch(CartActions.removeCartItem(itemId)),
+    removeFromCart: itemId => dispatch(CartActions.removeCartItem(itemId)),
 });
 
 export default connect(
