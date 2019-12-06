@@ -39,6 +39,16 @@ export default class {
         }
     }
 
+    static fetchStoreProducts = (storeId) => async (dispatch, getState) => {
+        try {
+            const result = await collection.where('store.id','==',storeId).get();
+            const data = result.docs.map(doc => ({id: doc.id, ...data}));
+            return data;
+        } catch (err) {
+            throw err;
+        }
+    }
+
     static createListener = (callback = () => {}, query) => {
         return collection.onSnapshot((result) => {
             const data = result.docs.map(data => ({id: data.id, ...data.data()}));

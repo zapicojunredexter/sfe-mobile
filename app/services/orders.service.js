@@ -39,6 +39,7 @@ export default class {
         }
     }
 
+
     static createListener = (callback = () => {}, query) => {
         return collection.onSnapshot((result) => {
             const data = result.docs.map(data => ({id: data.id, ...data.data()}));

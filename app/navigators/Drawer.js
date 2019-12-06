@@ -7,8 +7,9 @@ import UserAction from '../reducers/user/user.action';
 const screens = {
     'store' : {
         'Profile' : true,
+        'Products': true,
         'OrderHistory' : true,
-        'Feedbacks': true
+        'Feedbacks': true,
     },
     'customer' : {
         'Profile' : true,
