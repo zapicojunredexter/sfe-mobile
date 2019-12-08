@@ -12,27 +12,39 @@ class Registration extends React.Component<> {
     listener = null;
     componentDidMount(){
         console.log('mounted');
-        this.listener = UserService.createListener((result) => {
-            console.log('tua ra man unta', result);
-        });
+        // this.listener = UserService.createListener((result) => {
+        //     console.log('tua ra man unta', result);
+        // });
     }
     closeListener = () => {
-        if(this.listener) {
-            console.log('GINACLOSED');
-            this.listener();
-        }
+        // if(this.listener) {
+        //     console.log('GINACLOSED');
+        //     this.listener();
+        // }
     };
+
+    submitRegistration = () => {
+        const user = {
+            username: 'customer1',
+            password: 'customer',
+        };
+        const customer = {
+            name: `sample name ${new Date().getTime()}`,
+            mobileNumber: '09123123123',
+        };
+        UserService.registerCustomer(user, customer)
+            .then(() => {
+                alert('successfully registerd');
+            })
+            .catch(err => alert(err.message));
+    }
   render() {
     return (
       <View>
         <Text>You are in REGISTRATION PAGE</Text>
         <Button
             title="Create User"
-            onPress={() => {
-                this.props.add({sampleUser:123})
-                    .then(() => alert('DONE'))
-                    .catch(err => alert(err.message))
-            }}
+            onPress={this.submitRegistration}
         />
         <Button
             title="CLOSE LISTENER"
@@ -46,7 +58,6 @@ class Registration extends React.Component<> {
 const mapStateToProps = store => ({
 });
 const mapDispatchToProps = dispatch => ({
-    add: params => dispatch(UserService.add(params))
 });
 
 export default connect(

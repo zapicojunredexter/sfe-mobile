@@ -1,8 +1,10 @@
 import firebase from 'react-native-firebase';
 
+import CustomerService from './customers.service';
+
 export const collection = firebase.firestore().collection('users');
 
-export default class {
+export default class Service {
 
     static add = (params) => async (dispatch, getState) => {
         try {
@@ -61,6 +63,50 @@ export default class {
             if(user.password !== password) {
                 throw new Error('Wrong password');
             }
+            return user;
+        } catch(err) {
+            throw err;
+        }
+    }
+
+    static registerCustomer = async (user, customer) => {
+        try {
+            const { username } = user;
+            if(await Service.getUserByUsername(username)) {
+                throw new Error('Username already in use');
+            }
+    
+            const userDoc = collection.doc();
+            await userDoc.set({
+                ...user,
+                createdAtMs: firebase.firestore.FieldValue.serverTimestamp(),
+                updatedAtMs: firebase.firestore.FieldValue.serverTimestamp(),
+                deleted: false,
+            });
+            alert('id'+userDoc.id);
+            await CustomerService.set(userDoc.id, {
+                ...customer,
+                createdAtMs: firebase.firestore.FieldValue.serverTimestamp(),
+                updatedAtMs: firebase.firestore.FieldValue.serverTimestamp(),
+                deleted: false,
+            });
+        } catch(err){
+            throw err;
+        }
+    }
+
+    static getUserByUsername = async (username) => {
+        try {
+            const user = await collection
+                .where('username', '==', username)
+                .get()
+                .then(results => {
+                    if(results.empty) {
+                        return null;
+                    }
+                    const data = results.docs.map(res => ({id: res.id, ...res.data()}));
+                    return data[0];
+                });
             return user;
         } catch(err) {
             throw err;
