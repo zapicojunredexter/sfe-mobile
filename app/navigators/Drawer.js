@@ -44,7 +44,9 @@ class DrawerComponent extends React.PureComponent<> {
                             source={{}}
                         />
                     </View>
-                    <Text style={{color: 'white',fontWeight: 'bold', fontSize: 15}}>{this.props.userId}</Text>
+                    <Text style={{color: 'white',fontWeight: 'bold', fontSize: 15}}>
+                        navigaros/Drawer.js
+                        {this.props.userId}</Text>
                 </View>
                 <SafeAreaView forceInset={{ top: 'always', horizontal: 'never' }}>
                     <DrawerItems

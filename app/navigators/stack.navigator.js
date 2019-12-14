@@ -14,7 +14,7 @@ import StoreDetails from '../containers/main.screens/stores/StoreDetails';
 import ConfirmOrder  from '../containers/main.screens/stores/ConfirmOrder';
 import Login from '../containers/authentication.screens/login/Login';
 import Registration from '../containers/authentication.screens/registration/Registration';
-import Drawer from './drawer';
+import Drawer from './Drawer';
 const AuthenticationStack = createStackNavigator({
     Login : {
         screen : Login,
@@ -31,7 +31,7 @@ const createStackWithNotifIcon = (screens) =>
             navigationOptions : (({ navigation, screenProps }) => ({
                 headerLeft : (
                     <TouchableOpacity onPress={navigation.toggleDrawer}>
-                        <Text>TOGGLE</Text>
+                        <Text>src/navigators/stack.navigator.js</Text>
                     </TouchableOpacity>
                     
                 ),
