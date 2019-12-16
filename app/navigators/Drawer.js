@@ -29,20 +29,21 @@ class DrawerComponent extends React.PureComponent<> {
         const isLoggedIn = userId;
         return (
             <ScrollView>
-                <View style={{width:'100%',backgroundColor : '#147DAD',padding:20, alignItems:'center'}}>
+                <View style={{width:'100%',backgroundColor : '#f7907e',padding:20, alignItems:'center'}}>
                     <View
                         style={{
-                            backgroundColor: '#0B5173',
-                            height: 80,
-                            width: 80,
-                            borderRadius:40,
+                            backgroundColor: 'white',
+                            height: 70,
+                            width: 70,
+                            borderRadius:35,
                             alignItems: 'center',
                             justifyContent: 'center',
                         }}>
                         <Image
                             style={{width: 70, height: 70}}
-                            source={{}}
+                            source={require('../assets/images/sfelogo.png')}
                         />
+                        {/* <Text style={{fontSize: 30}}>C</Text> */}
                     </View>
                     <Text style={{color: 'white',fontWeight: 'bold', fontSize: 15}}>
                         navigaros/Drawer.js

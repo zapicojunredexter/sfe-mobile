@@ -24,7 +24,8 @@ class Container extends React.Component<> {
     state = {
         store: null,
         isConfirmed: false,
-        deliveryAddress: 'Talisay City'
+        deliveryAddress: 'Talisay City',
+        noteText: 'Sample notes or additional information here'
     };
 
     componentDidMount(){
@@ -62,16 +63,12 @@ class Container extends React.Component<> {
             { name: "order 1"},
             { name: "order 2"},
             { name: "order 3"},
-            { name: "order 4"},
-            { name: "order 5"},
-            { name: "order 6"},
-            { name: "order 7"},
-            { name: "order 8"},
-            { name: "order 9"},
-            { name: "order 10"}
+            { name: "order 4"}
             
         ]
         const isConfirmed = this.state.isConfirmed
+        const noteText = this.state.noteText
+        const deliveryAddress = this.state.deliveryAddress
 
         return (
             <View style={{flex: 1}}>
@@ -79,6 +76,10 @@ class Container extends React.Component<> {
                 
                 <ScrollView>
                     <Card>
+                         <View style={{flexDirection: 'row',justifyContent: 'space-between', marginBottom: 10}}>
+                            <Text style={{fontSize: 16}}>Name:</Text>
+                            <Text style={{fontSize: 16}}>Juan Luna</Text>
+                        </View>
                         <View style={{flexDirection: 'row',justifyContent: 'space-between', marginBottom: 10}}>
                             <Text style={{fontSize: 16}}>Contact Number:</Text>
                             <Text style={{fontSize: 16}}>09123123122</Text>
@@ -88,17 +89,29 @@ class Container extends React.Component<> {
                             <TextInput
                             style={{ fontSize: 16}}
                             value= {this.state.deliveryAddress}
-                            // onChange = {this.setState(value)}
+                            onChangeText = {(deliveryAddress) => this.setState({deliveryAddress})}
                             />
                         </View>
                         <View>
-                            <Text>Payment Type</Text>
+                            <Text style={{fontSize: 16, marginBottom: 10}}>Payment Type</Text>
                         </View>
                         <ButtonGroup
                             onPress={index => alert(index)}
-                            selectedIndex={1}
-                            buttons={[<Text>Option1</Text>,<Text>Option2</Text>,<Text>Option3</Text>]}
-                            containerStyle={{height: 100}} />
+                            selectedIndex={0}
+                            // buttonStyle = {{backgroundColor: 'tomato', color: 'white'}}
+                            buttons={[<Text>COD</Text>,<Text>Credit Card</Text>]}
+                            containerStyle={{height: 50, marginBottom: 10}} />
+                        <View>
+                            <Text style={{fontSize: 16}}>Note</Text>
+                        </View>
+                        <View>
+                        <TextInput
+                            multiline={true}
+                            numberOfLines={2}
+                            onChangeText={(noteText) => this.setState({noteText})}
+                            value={this.state.noteText}
+                            style = {{marginBottom: 10}}/>
+                        </View>
                     </Card>
                 </ScrollView>
 
@@ -132,7 +145,7 @@ class Container extends React.Component<> {
                     />
                     <View style={{flexDirection: 'row',justifyContent: 'space-between', marginTop: 10}}>
                         <Text style={{fontSize: 16}}>Subtotal</Text>
-                        <Text style={{fontSize: 16}}>&#8369; 20</Text>
+                        <Text style={{fontSize: 16}}>&#8369; 40</Text>
                     </View>
                     <View style={{flexDirection: 'row',justifyContent: 'space-between', marginTop: 10, marginBottom: 10}}>
                         <Text style={{fontSize: 16}}>Delivery Fee</Text>
@@ -146,7 +159,7 @@ class Container extends React.Component<> {
                     />
                     <View style={{flexDirection: 'row',justifyContent: 'space-between', marginTop: 10}}>
                         <Text style={{fontSize: 18, fontWeight: 'bold'}}>Total</Text>
-                        <Text style={{fontSize: 18, fontWeight: 'bold', color: 'tomato'}}>&#8369; 50</Text>
+                        <Text style={{fontSize: 18, fontWeight: 'bold', color: 'tomato'}}>&#8369; 70</Text>
                     </View>
                     </Card>    
                     

@@ -3,7 +3,10 @@ import { connect } from 'react-redux';
 import {
   Text,
   View,
-  Button,
+  TouchableOpacity,
+  Image,
+  TextInput,
+  ScrollView
 } from 'react-native';
 import UserService from '../../../services/user.service';
 
@@ -40,8 +43,64 @@ class Registration extends React.Component<> {
     }
   render() {
     return (
-      <View>
-        <Text>You are in REGISTRATION PAGE</Text>
+      <View style={{flex: 1, backgroundColor: 'tomato'}}>
+        <ScrollView>
+          <View style={{ justifyContent: 'center', alignItems: 'center', top: '2%', marginBottom: 10}}
+          >
+            <Image
+                style = {{width: 120 , height: 120}}
+                source={require('../../../assets/images/sfelogowhite.png')}
+            />
+            <TextInput
+              placeholder="Email Address"
+              placeholderTextColor = 'white'
+              underlineColorAndroid = 'white'
+              style={{color: 'white',marginTop: 20, marginBottom: 10, width: '70%'}}
+            />
+            <TextInput
+              placeholderTextColor = 'white'
+              underlineColorAndroid = 'white'
+              style={{color: 'white', marginBottom: 10 , width: '70%'}}
+              placeholder="Password"
+            />
+            <TextInput
+              placeholderTextColor = 'white'
+              underlineColorAndroid = 'white'
+              style={{color: 'white', marginBottom: 10 , width: '70%'}}
+              placeholder="Confirm Password"
+            />
+            <TextInput
+              placeholder="First Name"
+              placeholderTextColor = 'white'
+              underlineColorAndroid = 'white'
+              style={{color: 'white',marginBottom: 10, width: '70%'}}
+            />
+            <TextInput
+              placeholder="Last Name"
+              placeholderTextColor = 'white'
+              underlineColorAndroid = 'white'
+              style={{color: 'white', marginBottom: 10, width: '70%'}}
+            />
+            <TextInput
+              placeholder="Contact Number"
+              placeholderTextColor = 'white'
+              underlineColorAndroid = 'white'
+              style={{color: 'white', marginBottom: 10, width: '70%'}}
+            />
+            <TextInput
+              placeholder="Default Delivery Address"
+              placeholderTextColor = 'white'
+              underlineColorAndroid = 'white'
+              style={{color: 'white', marginBottom: 10, width: '70%'}}
+            />
+            <TouchableOpacity       
+              style={{backgroundColor: 'white', color: 'tomato', width: '50%', padding: 10, borderRadius: 5}}>
+              <Text style={{color: 'tomato', textAlign: 'center', fontSize: 16}}>Register</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+
+        {/* <Text>You are in REGISTRATION PAGE</Text>
         <Button
             title="Create User"
             onPress={this.submitRegistration}
@@ -50,7 +109,7 @@ class Registration extends React.Component<> {
             title="CLOSE LISTENER"
             onPress={this.closeListener}
         />
-        
+         */}
       </View>
     );
   }

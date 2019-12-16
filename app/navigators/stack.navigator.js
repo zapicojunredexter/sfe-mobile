@@ -1,6 +1,7 @@
 import React from 'react';
 import {TouchableOpacity, Text} from 'react-native';
 import { createStackNavigator, createDrawerNavigator } from 'react-navigation';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import InitialRoute from './InitialRoute';
 import Profile from '../containers/main.screens/profile/Profile';
 import OrderHistory from '../containers/main.screens/order.history/OrderHistory';
@@ -31,12 +32,16 @@ const createStackWithNotifIcon = (screens) =>
             navigationOptions : (({ navigation, screenProps }) => ({
                 headerLeft : (
                     <TouchableOpacity onPress={navigation.toggleDrawer}>
-                        <Text>src/navigators/stack.navigator.js</Text>
+                        <Icon
+                        name={'menu'}
+                        color='white'
+                        size = {35} 
+                        style= {{paddingLeft: 20}}/>
                     </TouchableOpacity>
                     
                 ),
                 headerStyle: {
-                    // backgroundColor: '#0B5173',
+                    backgroundColor: 'tomato',
                 },
                 // headerTintColor: '#fff',
             })),
@@ -60,7 +65,7 @@ const MainStack = createDrawerNavigator({
     Profile: {
         screen: createStackWithNotifIcon({Profile}),
         navigationOptions: {
-            drawerLabel: 'ProFile',
+            drawerLabel: 'Profile',
             // drawerIcon: () => (
             //     <Entypo name="home" size={20} color="#fff" />
             // ),
@@ -95,7 +100,9 @@ const MainStack = createDrawerNavigator({
     },
 }, {
     contentComponent : Drawer,
-    drawerBackgroundColor : '#0B5173',
+    // drawerBackgroundColor : '#0B5173',
+    drawerBackgroundColor : 'tomato',
+    
 });
 
 const StackNavigator = createStackNavigator(

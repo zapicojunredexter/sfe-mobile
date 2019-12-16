@@ -78,8 +78,8 @@ class Container extends React.Component<> {
                        >
                         <Card>
                             <Image
-                                style = {{width: 350 , height: 170}}
-                                source={require('./adasda.jpg')}
+                                style = {{width: 350 , height: 170, backgroundColor: 'black'}}
+                                source={require('../../../assets/images/sample.png')}
                             />
                             <View style={{
                                 flex: 1,
@@ -98,7 +98,7 @@ class Container extends React.Component<> {
                        </TouchableOpacity>
                      )}
                 />
-                <Button title="Go to Store Details" onPress={() => this.props.navigation.navigate('StoreDetails')}/>
+                {/* <Button title="Go to Store Details" onPress={() => this.props.navigation.navigate('StoreDetails')}/> */}
                 
             </View>
         );

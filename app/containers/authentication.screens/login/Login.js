@@ -3,8 +3,9 @@ import { connect } from 'react-redux';
 import {
   Text,
   View,
-  Button,
-  TextInput
+  TextInput,
+  Image,
+  TouchableOpacity
 } from 'react-native';
 import UserActions from '../../../reducers/user/user.action';
 import UserService from '../../../services/user.service';
@@ -36,8 +37,45 @@ class Login extends React.Component<> {
     
   render() {
     return (
-      <View>
-        <Text>You are in LOGIN PAGE</Text>
+      <View style={{flex: 1, backgroundColor: 'tomato'}}>
+        <View style={{ justifyContent: 'center', alignItems: 'center', top: '15%'}}
+        >
+          <Image
+              style = {{width: 150 , height: 150}}
+              source={require('../../../assets/images/sfelogowhite.png')}
+          />
+          <TextInput
+            value={this.state.username}
+            onChangeText={text => this.setState({username: text})}
+            placeholder="Email Address"
+            placeholderTextColor = 'white'
+            underlineColorAndroid = 'white'
+            style={{color: 'white',marginTop: 20, marginBottom: 10, width: '70%'}}
+          />
+           <TextInput
+            value={this.state.password}
+            onChangeText={text => this.setState({password: text})}
+            placeholderTextColor = 'white'
+            underlineColorAndroid = 'white'
+            style={{color: 'white', marginBottom: 20 , width: '70%'}}
+            placeholder="Password"
+          />
+          <TouchableOpacity       
+            style={{backgroundColor: 'white', color: 'tomato', width: '50%', padding: 15, borderRadius: 5}} >
+            <Text style={{color: 'tomato', textAlign: 'center', fontSize: 16}} onPress={this.login} >Login</Text>
+          </TouchableOpacity>
+
+          <Text style={{color: 'white', marginTop: 10}} >
+            Forgot Password?
+          </Text>
+
+          <Text style={{color: 'white', marginTop: 30}} onPress={() => this.props.navigation.navigate('Registration')}>
+            New user? Create an account
+          </Text>
+          
+        </View>
+
+        {/* <Text>You are in LOGIN PAGE</Text>
         <TextInput
             value={this.state.username}
             onChangeText={text => this.setState({username: text})}
@@ -52,7 +90,7 @@ class Login extends React.Component<> {
         <Button
             title="LOGIN"
             onPress={this.login}
-        />
+        /> */}
       </View>
     );
   }

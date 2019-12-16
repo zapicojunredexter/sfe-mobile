@@ -84,36 +84,38 @@ class Container extends React.Component<> {
         return (
             <View style={{flex: 1}}>
                 <ImageBackground
-                source={require('./adasda.jpg')}
+                source={require('../../../assets/images/sample.png')}
                 style={{
                     height: 170,
                     width: 450,
-                    position: 'relative', // because it's parent
-                    top: 0, left: '-2%', right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'
+                   
+                    backgroundColor: 'black'
                 }}
                 >
-                <Text
-                    style={{
-                    fontWeight: 'bold',
-                    color: 'white',
-                    position: 'absolute', // child
-                    fontSize: 24
-                    }}
-                >
-                    Albertos - San Isidro
-                </Text>
-                <Text
-                    style={{
-                    fontWeight: 'bold',
-                    color: 'white',
-                    position: 'absolute', // child
-                    fontSize: 18,
-                    top: '60%'
-                    }}
-                >
-                   <Icon name={'star'}  color="tomato" size={20}></Icon>
-                   <Text style={{color: 'tomato'}}>4.6 (10)</Text>
-                </Text>
+                <View style={{width: 450, height: 170, backgroundColor: 'rgba(0,0,0,0.60)', position: 'relative',  top: 0, left: '-2%', right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center',}}>
+                    <Text
+                        style={{
+                        fontWeight: 'bold',
+                        color: 'white',
+                        position: 'absolute', // child
+                        fontSize: 24
+                        }}
+                    >
+                        Albertos - San Isidro
+                    </Text>
+                    <Text
+                        style={{
+                        fontWeight: 'bold',
+                        color: 'white',
+                        position: 'absolute', // child
+                        fontSize: 18,
+                        top: '60%'
+                        }}
+                    >
+                    <Icon name={'star'}  color="tomato" size={20}></Icon>
+                    <Text style={{color: 'tomato'}}>4.6 (10)</Text>
+                    </Text>
+                </View>
                 </ImageBackground>
                 <View style={{flexDirection: 'row',justifyContent: 'space-around', backgroundColor: 'tomato'}}>
                 <TouchableOpacity  onPress={() => {
@@ -174,10 +176,10 @@ class Container extends React.Component<> {
                                  }}>
                                       <Image
                                      style = {{width: 100 , height: 100, borderRadius: 100/2 }}
-                                     source={require('./b.jpg')}
+                                     source={require('../../../assets/images/kwekwek.jpg')}
                                       />
                                      <View>
-                                         <Text style={{marginBottom: 2, fontSize: 16, fontWeight: 'bold'}}>Taho</Text>
+                                         <Text style={{marginBottom: 2, fontSize: 16, fontWeight: 'bold'}}>Kwek-Kwek</Text>
                                          <Text style={{marginBottom: 2, fontSize: 12}}>Lorem Ipsum Lorem Ipsum</Text>
                                          <Text style={{marginBottom: 2, fontSize: 14, color: 'tomato'}}>&#8369; 10</Text>
                                      </View>
