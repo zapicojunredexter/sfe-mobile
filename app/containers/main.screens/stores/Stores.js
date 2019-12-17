@@ -47,7 +47,6 @@ class Container extends React.Component<> {
 
         return (
             <View  style = {{ flex: 1}}>
-                <Text>src/containers/main.screens/stores/index.js</Text>
                 <SearchBar style={{backgroundColor: 'transparent'}}
                     lightTheme
                     searchIcon = {<Icon name={'search'} size={20} color="#eaeaea" />}
@@ -69,7 +68,7 @@ class Container extends React.Component<> {
                     )}
                 /> */}
                  <FlatList
-                   data = { sampleStores } 
+                   data = { this.state.stores } 
                    renderItem={({item}) => (
                        <TouchableOpacity
                            onPress={() => {
@@ -87,7 +86,11 @@ class Container extends React.Component<> {
                                 justifyContent: 'space-between',
                                 marginTop: 15
                             }}>
-                                <Text style={{marginBottom: 5, fontSize: 20, fontWeight: 'bold'}}>Albertos - San Isidro</Text>
+                                <Text
+                                    style={{marginBottom: 5, fontSize: 20, fontWeight: 'bold'}}
+                                >
+                                    {item.name}
+                                </Text>
                                 <Text>
                                     <Icon name={'star'}  color="tomato" size={15}></Icon>
                                     <Text>4.6 (10)</Text>

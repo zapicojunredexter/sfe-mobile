@@ -50,6 +50,11 @@ export default class {
         }
     }
 
+    static find = async (docId) => {
+        const data = await collection.doc(docId).get().then(res => ({id: res.id, ...res.data()}));
+        return data;
+    }
+
     static createListener = (callback = () => {}, query) => {
         return collection.onSnapshot((result) => {
             const data = result.docs.map(data => ({id: data.id, ...data.data()}));

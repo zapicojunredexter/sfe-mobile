@@ -3,6 +3,7 @@ import {
     CLEAR_CART,
     REMOVE_CART_ITEM,
     SET_STORE,
+    UPDATE_CART_ITEM
 } from './cart.action';
 
 const initialState = {
@@ -49,6 +50,19 @@ class UserReducer {
                 return {
                     ...initialState,
                 };
+            }
+            case UPDATE_CART_ITEM: {
+                const toBeUpdated = state.cartItems[action.id];
+                return toBeUpdated ? {
+                    ...state,
+                    cartItems: {
+                        ...state.cartItems,
+                        [action.id]: {
+                            ...toBeUpdated,
+                            ...action.payload,
+                        },
+                    },
+                } : state;
             }
             default: {
                 return state;

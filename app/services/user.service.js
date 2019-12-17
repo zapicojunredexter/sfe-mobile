@@ -1,6 +1,7 @@
 import firebase from 'react-native-firebase';
 
 import CustomerService from './customers.service';
+import StoreService from './store.service';
 
 export const collection = firebase.firestore().collection('users');
 
@@ -50,7 +51,7 @@ export default class Service {
 
     static login = async (username, password) => {
         try {
-            const user = await collection
+            const authUser = await collection
                 .where('username', '==', username)
                 .get()
                 .then(results => {
@@ -63,7 +64,9 @@ export default class Service {
             if(user.password !== password) {
                 throw new Error('Wrong password');
             }
-            return user;
+            const userObj = await user.type === 'store' ? StoreService.find(authUser.id) : CustomerService.find(authUser.id);
+            return {...userObj,...authUser};
+            // return user;
         } catch(err) {
             throw err;
         }
@@ -83,7 +86,6 @@ export default class Service {
                 updatedAtMs: firebase.firestore.FieldValue.serverTimestamp(),
                 deleted: false,
             });
-            alert('id'+userDoc.id);
             await CustomerService.set(userDoc.id, {
                 ...customer,
                 createdAtMs: firebase.firestore.FieldValue.serverTimestamp(),

@@ -39,21 +39,12 @@ class Container extends React.Component<> {
         }
     }
     render() {
-        const { store, tabIndex } = this.state;
-        const  sampleProducts = [
-            {
-                name: "product 1"
-            },
-            {
-                name: "product 2"
-            },
-            {
-                name: "product 3"
-            },
-            {
-                name: "product 4"
-            }
-        ]
+        const { store, tabIndex, products } = this.state;
+        const { cartItems } = this.props;
+        const cartArray = Object.values(cartItems);
+        const totalCart = cartArray.reduce((acc, cur) => {
+            return acc + cur.price;
+        }, 0);
         const sampleStoreDetails = [
             {
                 name: 'Store 1',
@@ -92,7 +83,19 @@ class Container extends React.Component<> {
                     backgroundColor: 'black'
                 }}
                 >
-                <View style={{width: 450, height: 170, backgroundColor: 'rgba(0,0,0,0.60)', position: 'relative',  top: 0, left: '-2%', right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center',}}>
+                <View
+                    style={{
+                        width: 450,
+                        height: 170,
+                        backgroundColor: 'rgba(0,0,0,0.60)',
+                        position: 'relative', 
+                        top: 0,
+                        // left: '-2%',
+                        right: 0,
+                        bottom: 0,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}>
                     <Text
                         style={{
                         fontWeight: 'bold',
@@ -101,7 +104,7 @@ class Container extends React.Component<> {
                         fontSize: 24
                         }}
                     >
-                        Albertos - San Isidro
+                        {store && store.name}
                     </Text>
                     <Text
                         style={{
@@ -118,75 +121,70 @@ class Container extends React.Component<> {
                 </View>
                 </ImageBackground>
                 <View style={{flexDirection: 'row',justifyContent: 'space-around', backgroundColor: 'tomato'}}>
-                <TouchableOpacity  onPress={() => {
-                    this.setState({tabIndex: 0})
-                }} 
-                    style={tabIndex == 0 ? {borderBottomColor: 'white', borderBottomWidth: 2,  flex: 1, justifyContent: 'center', alignItems: 'center', padding: 15} : {justifyContent: 'center', alignItems: 'center', padding: 15, flex: 1}}
-                >
-                    <Text style={{color: 'white'}}>
-                    Menu
-                    </Text>
-                </TouchableOpacity>
-                <TouchableOpacity  onPress={() => {
-                    this.setState({tabIndex: 1})
-                }}
-                   style={tabIndex == 1 ? {borderBottomColor: 'white', borderBottomWidth: 2,  flex: 1, justifyContent: 'center', alignItems: 'center', padding: 15} : {justifyContent: 'center', alignItems: 'center', padding: 15, flex: 1} }
-                >
-                    <Text style={{color: 'white'}}>
-                    Store Details
-                    </Text>
-                </TouchableOpacity>
-                <TouchableOpacity  onPress={() => {
-                    this.setState({tabIndex: 2})
-                }}
-                  style={tabIndex == 2 ? {borderBottomColor: 'white', borderBottomWidth: 2, flex: 1, justifyContent: 'center', alignItems: 'center', padding: 15} : {justifyContent: 'center', alignItems: 'center', padding: 15, flex: 1}}
-                >
-                    <Text style={{color: 'white'}}>
-                    Reviews
-                    </Text>
-                </TouchableOpacity>
+                    <TouchableOpacity  onPress={() => {
+                        this.setState({tabIndex: 0})
+                    }} 
+                        style={tabIndex == 0 ? {borderBottomColor: 'white', borderBottomWidth: 2,  flex: 1, justifyContent: 'center', alignItems: 'center', padding: 15} : {justifyContent: 'center', alignItems: 'center', padding: 15, flex: 1}}
+                    >
+                        <Text style={{color: 'white'}}>
+                        Menu
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity  onPress={() => {
+                        this.setState({tabIndex: 1})
+                    }}
+                    style={tabIndex == 1 ? {borderBottomColor: 'white', borderBottomWidth: 2,  flex: 1, justifyContent: 'center', alignItems: 'center', padding: 15} : {justifyContent: 'center', alignItems: 'center', padding: 15, flex: 1} }
+                    >
+                        <Text style={{color: 'white'}}>
+                        Store Details
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity  onPress={() => {
+                        this.setState({tabIndex: 2})
+                    }}
+                    style={tabIndex == 2 ? {borderBottomColor: 'white', borderBottomWidth: 2, flex: 1, justifyContent: 'center', alignItems: 'center', padding: 15} : {justifyContent: 'center', alignItems: 'center', padding: 15, flex: 1}}
+                    >
+                        <Text style={{color: 'white'}}>
+                        Reviews
+                        </Text>
+                    </TouchableOpacity>
                 </View>
-{/* 
-                <Text>src/containers/main.screens/stores/StoreDetails.js</Text>
-                <Text style={{marginTop: 15}}>STORE DETAILS: {JSON.stringify(store)}</Text>
-                <Text style={{marginTop: 15}}>PRODUCTS: </Text> */}
                 {tabIndex == 0 && (
                      <FlatList
-                     data={ sampleProducts }
+                     data={ products }
                      extraData={this.props.cartItems}
                      renderItem={({item}) => {
                          const isInCart = !!this.props.cartItems[item.id];
                          return (
-                             <TouchableOpacity
-                                 // onPress={() => {
-                                 //     if(isInCart) {
-                                 //         this.props.removeFromCart(item.id);
-                                 //     } else {
-                                 //         this.props.addCartItem(item);
-                                 //     }
-                                 // }}
-                             >
-                              <Card>
-                                
-                                 <View style={{
-                                     flex: 1,
-                                     flexDirection: 'row',
-                                     justifyContent: 'space-around',
-                                     marginTop: 15
-                                 }}>
-                                      <Image
-                                     style = {{width: 100 , height: 100, borderRadius: 100/2 }}
-                                     source={require('../../../assets/images/kwekwek.jpg')}
-                                      />
-                                     <View>
-                                         <Text style={{marginBottom: 2, fontSize: 16, fontWeight: 'bold'}}>Kwek-Kwek</Text>
-                                         <Text style={{marginBottom: 2, fontSize: 12}}>Lorem Ipsum Lorem Ipsum</Text>
-                                         <Text style={{marginBottom: 2, fontSize: 14, color: 'tomato'}}>&#8369; 10</Text>
-                                     </View>
-                                     
-                                 </View>
-                             </Card>    
-                                 {/* <Text> - {JSON.stringify(item)}</Text> */}
+                            <TouchableOpacity
+                                 onPress={() => {
+                                     if(isInCart) {
+                                         this.props.removeFromCart(item.id);
+                                     } else {
+                                         this.props.addCartItem(item);
+                                     }
+                                 }}
+                            >
+                                <Card
+                                    containerStyle={isInCart && {borderColor: 'tomato'}}
+                                >
+                                    <View style={{
+                                        flex: 1,
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-around',
+                                        marginTop: 15,
+                                    }}>
+                                        <Image
+                                            style = {{width: 100 , height: 100, borderRadius: 100/2 }}
+                                            source={require('../../../assets/images/kwekwek.jpg')}
+                                        />
+                                        <View>
+                                                <Text style={{marginBottom: 2, fontSize: 16, fontWeight: 'bold'}}>{item.name}</Text>
+                                                <Text style={{marginBottom: 2, fontSize: 12}}>{item.description}</Text>
+                                                <Text style={{marginBottom: 2, fontSize: 14, color: 'tomato'}}>&#8369; 10</Text>
+                                        </View>
+                                    </View>
+                                </Card>    
                              </TouchableOpacity>
                          );
                      }}
@@ -200,68 +198,68 @@ class Container extends React.Component<> {
                     renderItem={({item}) => {
                         const isInCart = !!this.props.cartItems[item.id];
                         return (
-                            <TouchableOpacity >
+                            <TouchableOpacity>
                                 <Card>
-                                <Text style={{marginBottom: 5, fontSize: 16}}>Name: Albertos</Text>
-                                <Text style={{marginBottom: 5, fontSize: 16}}>Location: San Isidro Talisay City Cebu</Text>
-                                <Text style={{fontSize: 16}}>Store Hours: </Text>
-                                <View style={{flex: 1,
-                                    flexDirection: 'row',
-                                    justifyContent: 'space-between',
-                                    marginTop: 15,
-                                    marginLeft: 20,}} >
-                                    <Text style={{color: 'tomato'}}>Monday</Text>
-                                    <Text style={{color: 'tomato'}}>10am - 10pm</Text>
-                                </View>
-                                <View style={{flex: 1,
-                                    flexDirection: 'row',
-                                    justifyContent: 'space-between',
-                                    marginTop: 15,
-                                    marginLeft: 20}} >
-                                    <Text style={{color: 'tomato'}}>Tueday</Text>
-                                    <Text style={{color: 'tomato'}}>10am - 10pm</Text>
-                                </View>
-                                <View style={{flex: 1,
-                                    flexDirection: 'row',
-                                    justifyContent: 'space-between',
-                                    marginTop: 15,
-                                    marginLeft: 20}} >
-                                    <Text style={{color: 'tomato'}}>Wednesday</Text>
-                                    <Text style={{color: 'tomato'}}>10am - 10pm</Text>
-                                </View>
-                                <View style={{flex: 1,
-                                    flexDirection: 'row',
-                                    justifyContent: 'space-between',
-                                    marginTop: 15,
-                                    marginLeft: 20}} >
-                                    <Text style={{color: 'tomato'}}>Thursday</Text>
-                                    <Text style={{color: 'tomato'}}>10am - 10pm</Text>
-                                </View>
-                                <View style={{flex: 1,
-                                    flexDirection: 'row',
-                                    justifyContent: 'space-between',
-                                    marginTop: 15,
-                                    marginLeft: 20}} >
-                                    <Text style={{color: 'tomato'}}>Friday</Text>
-                                    <Text style={{color: 'tomato'}}>10am - 10pm</Text>
-                                </View>
-                                <View style={{flex: 1,
-                                    flexDirection: 'row',
-                                    justifyContent: 'space-between',
-                                    marginTop: 15,
-                                    marginLeft: 20}} >
-                                    <Text style={{color: 'gray'}}>Saturday</Text>
-                                    <Text style={{color: 'gray'}}>Closed</Text>
-                                </View>
-                                <View style={{flex: 1,
-                                    flexDirection: 'row',
-                                    justifyContent: 'space-between',
-                                    marginTop: 15,
-                                    marginLeft: 20}} >
-                                    <Text style={{color: 'gray'}}>Sunday</Text>
-                                    <Text style={{color: 'gray'}}>Closed</Text>
-                                </View>
-                            </Card>    
+                                    <Text style={{marginBottom: 5, fontSize: 16}}>Name: {store && store.name}</Text>
+                                    <Text style={{marginBottom: 5, fontSize: 16}}>Location: {store && store.address}</Text>
+                                    <Text style={{fontSize: 16}}>Store Hours: </Text>
+                                    <View style={{flex: 1,
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-between',
+                                        marginTop: 15,
+                                        marginLeft: 20,}} >
+                                        <Text style={{color: 'tomato'}}>Monday</Text>
+                                        <Text style={{color: 'tomato'}}>10am - 10pm</Text>
+                                    </View>
+                                    <View style={{flex: 1,
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-between',
+                                        marginTop: 15,
+                                        marginLeft: 20}} >
+                                        <Text style={{color: 'tomato'}}>Tueday</Text>
+                                        <Text style={{color: 'tomato'}}>10am - 10pm</Text>
+                                    </View>
+                                    <View style={{flex: 1,
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-between',
+                                        marginTop: 15,
+                                        marginLeft: 20}} >
+                                        <Text style={{color: 'tomato'}}>Wednesday</Text>
+                                        <Text style={{color: 'tomato'}}>10am - 10pm</Text>
+                                    </View>
+                                    <View style={{flex: 1,
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-between',
+                                        marginTop: 15,
+                                        marginLeft: 20}} >
+                                        <Text style={{color: 'tomato'}}>Thursday</Text>
+                                        <Text style={{color: 'tomato'}}>10am - 10pm</Text>
+                                    </View>
+                                    <View style={{flex: 1,
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-between',
+                                        marginTop: 15,
+                                        marginLeft: 20}} >
+                                        <Text style={{color: 'tomato'}}>Friday</Text>
+                                        <Text style={{color: 'tomato'}}>10am - 10pm</Text>
+                                    </View>
+                                    <View style={{flex: 1,
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-between',
+                                        marginTop: 15,
+                                        marginLeft: 20}} >
+                                        <Text style={{color: 'gray'}}>Saturday</Text>
+                                        <Text style={{color: 'gray'}}>Closed</Text>
+                                    </View>
+                                    <View style={{flex: 1,
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-between',
+                                        marginTop: 15,
+                                        marginLeft: 20}} >
+                                        <Text style={{color: 'gray'}}>Sunday</Text>
+                                        <Text style={{color: 'gray'}}>Closed</Text>
+                                    </View>
+                                </Card>    
                                 
                             </TouchableOpacity>
                         );
@@ -293,19 +291,23 @@ class Container extends React.Component<> {
                         }}
                     />    
                 )}
-                     <TouchableOpacity style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        marginTop: 15,
-                        backgroundColor: 'tomato',
-                        padding: 10
-                     }}
-                       onPress={() => {
-                        this.props.navigation.navigate('ConfirmOrder', store);
-                    }}  
+                     <TouchableOpacity
+                        style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            marginTop: 15,
+                            backgroundColor: 'tomato',
+                            padding: 10
+                        }}
+                        onPress={() => {
+                            this.props.navigation.navigate('ConfirmOrder', store);
+                        }}
+                        disabled={cartArray.length === 0}  
                     >
-                      <Badge value={<Text style={{color: 'tomato', fontWeight: 'bold'}}>2</Text>} badgeStyle = {{backgroundColor: 'white', width: 30, height: 30, borderRadius: 30/2 }} />
-                      <Text style={{fontSize: 18, color: 'white', fontWeight: 'bold'}}>&#8369; 200</Text>
+                      <Badge value={<Text style={{color: 'tomato', fontWeight: 'bold'}}>{cartArray.length}</Text>} badgeStyle = {{backgroundColor: 'white', width: 30, height: 30, borderRadius: 30/2 }} />
+                        <Text style={{fontSize: 18, color: 'white', fontWeight: 'bold'}}>
+                          &#8369; {totalCart}
+                        </Text>
                       <Icon name= {'angle-right'} color='white' size={25}/>
                     </TouchableOpacity>
 
