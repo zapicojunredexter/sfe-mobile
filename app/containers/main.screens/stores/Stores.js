@@ -96,7 +96,7 @@ class Container extends React.Component<> {
                                     <Text>4.6 (10)</Text>
                                 </Text>
                             </View>
-                            <Text style={{fontSize: 14, color: 'tomato', marginBottom: 15}}>&#8369; 70 Delivery Fee</Text>
+                            <Text style={{fontSize: 14, color: 'tomato', marginBottom: 15}}>&#8369; {item.deliveryFee || 0} Delivery Fee</Text>
                         </Card>
                        </TouchableOpacity>
                      )}

@@ -24,7 +24,7 @@ class DrawerComponent extends React.PureComponent<> {
     }
 
     render() {
-        const { items, userType, userId } = this.props;
+        const { items, userType, userId, userName } = this.props;
         const filteredItems = (userType) ? items.filter((item, index) => screens[userType][item.key]) : [];
         const isLoggedIn = userId;
         return (
@@ -46,8 +46,7 @@ class DrawerComponent extends React.PureComponent<> {
                         {/* <Text style={{fontSize: 30}}>C</Text> */}
                     </View>
                     <Text style={{color: 'white',fontWeight: 'bold', fontSize: 15}}>
-                        navigaros/Drawer.js
-                        {this.props.userId}</Text>
+                        {(userName)}</Text>
                 </View>
                 <SafeAreaView forceInset={{ top: 'always', horizontal: 'never' }}>
                     <DrawerItems
@@ -93,6 +92,7 @@ class DrawerComponent extends React.PureComponent<> {
 const mapStateToProps = store => ({
     userId: store.userStore.user && store.userStore.user.id,
     userType: store.userStore.user && store.userStore.user.type,
+    userName: store.userStore.user && store.userStore.user.name,
 });
 const mapDispatchToProps = dispatch => ({
     logout: () => dispatch(UserAction.setUser(null)),

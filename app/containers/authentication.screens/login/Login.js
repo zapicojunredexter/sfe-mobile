@@ -60,9 +60,11 @@ class Login extends React.Component<> {
             style={{color: 'white', marginBottom: 20 , width: '70%'}}
             placeholder="Password"
           />
-          <TouchableOpacity       
-            style={{backgroundColor: 'white', color: 'tomato', width: '50%', padding: 15, borderRadius: 5}} >
-            <Text style={{color: 'tomato', textAlign: 'center', fontSize: 16}} onPress={this.login} >Login</Text>
+          <TouchableOpacity  
+            onPress={this.login}     
+            style={{backgroundColor: 'white', color: 'tomato', width: '50%', padding: 15, borderRadius: 5}} 
+            >
+            <Text style={{color: 'tomato', textAlign: 'center', fontSize: 16}}>Login</Text>
           </TouchableOpacity>
 
           <Text style={{color: 'white', marginTop: 10}} >

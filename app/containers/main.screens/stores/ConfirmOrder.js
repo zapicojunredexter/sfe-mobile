@@ -98,7 +98,6 @@ class Container extends React.Component<> {
         return (
             <View style={{flex: 1}}>
                 {isConfirmed ? (
-                
                 <ScrollView>
                     <Card>
                          <View style={{flexDirection: 'row',justifyContent: 'space-between', marginBottom: 10}}>

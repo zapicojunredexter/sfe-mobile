@@ -61,10 +61,10 @@ export default class Service {
                     const data = results.docs.map(res => ({id: res.id, ...res.data()}));
                     return data[0];
                 });
-            if(user.password !== password) {
+            if(authUser.password !== password) {
                 throw new Error('Wrong password');
             }
-            const userObj = await user.type === 'store' ? StoreService.find(authUser.id) : CustomerService.find(authUser.id);
+            const userObj = authUser.type === 'store' ? await StoreService.find(authUser.id) :await CustomerService.find(authUser.id);
             return {...userObj,...authUser};
             // return user;
         } catch(err) {
@@ -91,7 +91,7 @@ export default class Service {
                 createdAtMs: firebase.firestore.FieldValue.serverTimestamp(),
                 updatedAtMs: firebase.firestore.FieldValue.serverTimestamp(),
                 deleted: false,
-            });
+            })();
         } catch(err){
             throw err;
         }

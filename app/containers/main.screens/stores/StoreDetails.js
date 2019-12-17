@@ -7,7 +7,8 @@ import {
   FlatList,
   ImageBackground,
   Image,
-  TouchableOpacity 
+  TouchableOpacity,
+  Alert
 } from 'react-native';
 import { Card, Badge } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -40,18 +41,11 @@ class Container extends React.Component<> {
     }
     render() {
         const { store, tabIndex, products } = this.state;
-        const { cartItems } = this.props;
+        const { cartItems, isLoggedIn } = this.props;
         const cartArray = Object.values(cartItems);
         const totalCart = cartArray.reduce((acc, cur) => {
             return acc + cur.price;
         }, 0);
-        const sampleStoreDetails = [
-            {
-                name: 'Store 1',
-                location: 'Location sa Store',
-                hours: 'Monday: 10am - 10pm'
-            }
-        ]
 
         const sampleReviews = [
             {
@@ -158,10 +152,26 @@ class Container extends React.Component<> {
                          return (
                             <TouchableOpacity
                                  onPress={() => {
-                                     if(isInCart) {
-                                         this.props.removeFromCart(item.id);
+                                     if(isLoggedIn) {
+                                        if(isInCart) {
+                                            this.props.removeFromCart(item.id);
+                                        } else {
+                                            this.props.addCartItem(item);
+                                        }
                                      } else {
-                                         this.props.addCartItem(item);
+                                        Alert.alert(
+                                            'Not Logged in',
+                                            'You need to be logged in to use this service',
+                                            [
+                                            {text: 'Login', onPress: () => this.props.navigation.navigate('Login')},
+                                            {
+                                                text: 'Cancel',
+                                                onPress: () => console.log('Cancel Pressed'),
+                                                style: 'cancel',
+                                            },
+                                            ],
+                                            {cancelable: true},
+                                        );
                                      }
                                  }}
                             >
@@ -181,7 +191,7 @@ class Container extends React.Component<> {
                                         <View>
                                                 <Text style={{marginBottom: 2, fontSize: 16, fontWeight: 'bold'}}>{item.name}</Text>
                                                 <Text style={{marginBottom: 2, fontSize: 12}}>{item.description}</Text>
-                                                <Text style={{marginBottom: 2, fontSize: 14, color: 'tomato'}}>&#8369; 10</Text>
+                                                <Text style={{marginBottom: 2, fontSize: 14, color: 'tomato'}}>&#8369; {item.price}</Text>
                                         </View>
                                     </View>
                                 </Card>    
@@ -193,7 +203,7 @@ class Container extends React.Component<> {
 
                 {tabIndex == 1 && (
                    <FlatList
-                    data={ sampleStoreDetails }
+                    data={ [{}] }
                     extraData={this.props.cartItems}
                     renderItem={({item}) => {
                         const isInCart = !!this.props.cartItems[item.id];
@@ -203,6 +213,63 @@ class Container extends React.Component<> {
                                     <Text style={{marginBottom: 5, fontSize: 16}}>Name: {store && store.name}</Text>
                                     <Text style={{marginBottom: 5, fontSize: 16}}>Location: {store && store.address}</Text>
                                     <Text style={{fontSize: 16}}>Store Hours: </Text>
+                                    <View style={{flex: 1,
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-between',
+                                        marginTop: 15,
+                                        marginLeft: 20}} >
+                                        <Text style={{color: store && store.operatingHours && !store.operatingHours.Monday.closed ? 'tomato' : 'gray'}}>Monday</Text>
+                                        <Text style={{color: 'tomato'}}>{store && store.operatingHours && store.operatingHours.Monday ? (store.operatingHours.Monday.closed ? 'Closed':`${store.operatingHours.Monday.from} - ${store.operatingHours.Monday.to}`) : `Closed`}</Text>
+                                    </View>
+                                    <View style={{flex: 1,
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-between',
+                                        marginTop: 15,
+                                        marginLeft: 20}} >
+                                        <Text style={{color: store && store.operatingHours && !store.operatingHours.Tuesday.closed ? 'tomato' : 'gray'}}>Tuesday</Text>
+                                        <Text style={{color: 'tomato'}}>{store && store.operatingHours && store.operatingHours.Tuesday ? (store.operatingHours.Tuesday.closed ? 'Closed':`${store.operatingHours.Tuesday.from} - ${store.operatingHours.Tuesday.to}`) : `Closed`}</Text>
+                                    </View>
+                                    <View style={{flex: 1,
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-between',
+                                        marginTop: 15,
+                                        marginLeft: 20}} >
+                                        <Text style={{color: store && store.operatingHours && !store.operatingHours.Wednesday.closed ? 'tomato' : 'gray'}}>Wednesday</Text>
+                                        <Text style={{color: 'tomato'}}>{store && store.operatingHours && store.operatingHours.Wednesday ? (store.operatingHours.Wednesday.closed ? 'Closed':`${store.operatingHours.Wednesday.from} - ${store.operatingHours.Wednesday.to}`) : `Closed`}</Text>
+                                    </View>
+                                    <View style={{flex: 1,
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-between',
+                                        marginTop: 15,
+                                        marginLeft: 20}} >
+                                        <Text style={{color: store && store.operatingHours && !store.operatingHours.Thursday.closed ? 'tomato' : 'gray'}}>Thursday</Text>
+                                        <Text style={{color: 'tomato'}}>{store && store.operatingHours && store.operatingHours.Thursday ? (store.operatingHours.Thursday.closed ? 'Closed':`${store.operatingHours.Thursday.from} - ${store.operatingHours.Thursday.to}`) : `Closed`}</Text>
+                                    </View>
+                                    <View style={{flex: 1,
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-between',
+                                        marginTop: 15,
+                                        marginLeft: 20}} >
+                                        <Text style={{color: store && store.operatingHours && !store.operatingHours.Friday.closed ? 'tomato' : 'gray'}}>Friday</Text>
+                                        <Text style={{color: 'tomato'}}>{store && store.operatingHours && store.operatingHours.Friday ? (store.operatingHours.Friday.closed ? 'Closed':`${store.operatingHours.Friday.from} - ${store.operatingHours.Friday.to}`) : `Closed`}</Text>
+                                    </View>
+                                    <View style={{flex: 1,
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-between',
+                                        marginTop: 15,
+                                        marginLeft: 20}} >
+                                        <Text style={{color: store && store.operatingHours && !store.operatingHours.Saturday.closed ? 'tomato' : 'gray'}}>Saturday</Text>
+                                        <Text style={{color: 'tomato'}}>{store && store.operatingHours && store.operatingHours.Saturday ? (store.operatingHours.Saturday.closed ? 'Closed':`${store.operatingHours.Saturday.from} - ${store.operatingHours.Saturday.to}`) : `Closed`}</Text>
+                                    </View>
+                                    <View style={{flex: 1,
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-between',
+                                        marginTop: 15,
+                                        marginLeft: 20}} >
+                                        <Text style={{color: store && store.operatingHours && !store.operatingHours.Sunday.closed ? 'tomato' : 'gray'}}>Sunday</Text>
+                                        <Text style={{color: 'tomato'}}>{store && store.operatingHours && store.operatingHours.Sunday ? (store.operatingHours.Sunday.closed ? 'Closed':`${store.operatingHours.Sunday.from} - ${store.operatingHours.Sunday.to}`) : `Closed`}</Text>
+                                    </View>
+                                    {/*
                                     <View style={{flex: 1,
                                         flexDirection: 'row',
                                         justifyContent: 'space-between',
@@ -240,8 +307,8 @@ class Container extends React.Component<> {
                                         justifyContent: 'space-between',
                                         marginTop: 15,
                                         marginLeft: 20}} >
-                                        <Text style={{color: 'tomato'}}>Friday</Text>
-                                        <Text style={{color: 'tomato'}}>10am - 10pm</Text>
+                                        <Text style={{color: store && store.operatingHours && !store.operatingHours.DAY.closed ? 'tomato' : 'gray'}}>Friday</Text>
+                                        <Text style={{color: 'tomato'}}>{store && store.operatingHours && store.operatingHours.DAY ? `${store.operatingHours.DAY.from} - ${store.operatingHours.DAY.to}` : `Closed`}</Text>
                                     </View>
                                     <View style={{flex: 1,
                                         flexDirection: 'row',
@@ -259,6 +326,7 @@ class Container extends React.Component<> {
                                         <Text style={{color: 'gray'}}>Sunday</Text>
                                         <Text style={{color: 'gray'}}>Closed</Text>
                                     </View>
+                                    */}
                                 </Card>    
                                 
                             </TouchableOpacity>
@@ -317,7 +385,10 @@ class Container extends React.Component<> {
     }
 }
 const mapStateToProps = store => ({
-    cartItems: store.cartStore.cartItems
+    cartItems: store.cartStore.cartItems,
+    isLoggedIn: !!(store.userStore.user && store.userStore.user.id),
+    userId: store.userStore.user && store.userStore.user.id,
+    userType: store.userStore.user && store.userStore.user.type,
 });
 const mapDispatchToProps = dispatch => ({
     addCartItem: item => dispatch(CartActions.addCartItem(item)),

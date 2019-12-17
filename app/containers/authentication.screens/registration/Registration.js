@@ -13,6 +13,15 @@ import UserService from '../../../services/user.service';
 
 class Registration extends React.Component<> {
     listener = null;
+
+    state = {
+        username: '',
+        password: '',
+        name: '',
+        contactNumber: '',
+        address: '',
+
+    };
     componentDidMount(){
         console.log('mounted');
         // this.listener = UserService.createListener((result) => {
@@ -28,12 +37,14 @@ class Registration extends React.Component<> {
 
     submitRegistration = () => {
         const user = {
-            username: 'customer1',
-            password: 'customer',
+            username: this.state.username,
+            password: this.state.password,
+            type: 'customer',
         };
         const customer = {
-            name: `sample name ${new Date().getTime()}`,
-            mobileNumber: '09123123123',
+            name: this.state.name,
+            contactNumber: this.state.contactNumber,
+            address: this.state.address,
         };
         UserService.registerCustomer(user, customer)
             .then(() => {
@@ -52,48 +63,47 @@ class Registration extends React.Component<> {
                 source={require('../../../assets/images/sfelogowhite.png')}
             />
             <TextInput
-              placeholder="Email Address"
+              placeholder="Username"
               placeholderTextColor = 'white'
               underlineColorAndroid = 'white'
               style={{color: 'white',marginTop: 20, marginBottom: 10, width: '70%'}}
+              value={this.state.username}
+              onChangeText={ev => this.setState({username: ev})}
             />
             <TextInput
               placeholderTextColor = 'white'
               underlineColorAndroid = 'white'
               style={{color: 'white', marginBottom: 10 , width: '70%'}}
               placeholder="Password"
+              value={this.state.password}
+              onChangeText={ev => this.setState({password: ev})}
             />
             <TextInput
-              placeholderTextColor = 'white'
-              underlineColorAndroid = 'white'
-              style={{color: 'white', marginBottom: 10 , width: '70%'}}
-              placeholder="Confirm Password"
-            />
-            <TextInput
-              placeholder="First Name"
+              placeholder="Full Name"
               placeholderTextColor = 'white'
               underlineColorAndroid = 'white'
               style={{color: 'white',marginBottom: 10, width: '70%'}}
-            />
-            <TextInput
-              placeholder="Last Name"
-              placeholderTextColor = 'white'
-              underlineColorAndroid = 'white'
-              style={{color: 'white', marginBottom: 10, width: '70%'}}
+              value={this.state.name}
+              onChangeText={ev => this.setState({name: ev})}
             />
             <TextInput
               placeholder="Contact Number"
               placeholderTextColor = 'white'
               underlineColorAndroid = 'white'
               style={{color: 'white', marginBottom: 10, width: '70%'}}
+              value={this.state.contactNumber}
+              onChangeText={ev => this.setState({contactNumber: ev})}
             />
             <TextInput
               placeholder="Default Delivery Address"
               placeholderTextColor = 'white'
               underlineColorAndroid = 'white'
               style={{color: 'white', marginBottom: 10, width: '70%'}}
+              value={this.state.address}
+              onChangeText={ev => this.setState({address: ev})}
             />
-            <TouchableOpacity       
+            <TouchableOpacity  
+                onPress={this.submitRegistration}     
               style={{backgroundColor: 'white', color: 'tomato', width: '50%', padding: 10, borderRadius: 5}}>
               <Text style={{color: 'tomato', textAlign: 'center', fontSize: 16}}>Register</Text>
             </TouchableOpacity>
