@@ -42,49 +42,57 @@ class Container extends React.Component<> {
 
         return (
             <View style={{flex: 1}}>
-                <Text>src/containers/main.screens/order.history/index.js</Text>
                 <FlatList
-                    data={ sampleOrders }
-                    renderItem={({item}) => (
+                    data={ this.state.orders }
+                    renderItem={({item}) => {
+                        //  ['cancelled','waiting', 'accepted','rejected','delivery', 'delivered']
+                        const statusUC = item.status && item.status.toUpperCase() || 'wala';
+                        const cardBgColor = {
+                            'CANCELLED': 'tomato',
+                            'WAITING': 'lime',
+                            'ACCEPTED': '#79BEDB',
+                            'REJECTED': 'tomato',
+                            'DELIVERY': '#266A2E',
+                            'DELIVERED': '#266A2E',
+                        };
+                        return (
                         <TouchableOpacity
                             onPress={() => {
                                 this.props.navigation.navigate('OrderHistoryDetails', item)
                             }}
                         >
-                        <Card
-                            title='WAITING'
-                            titleStyle = {{backgroundColor: '#FF9900', color: 'white', padding: 10}}
-                            // title='CANCELLED'
-                            // titleStyle = {{backgroundColor: 'tomato', color: 'white', padding: 10}}
-                            // title='CONFIRMED'
-                            // titleStyle = {{backgroundColor: '#79BEDB', color: 'white', padding: 10}}
-                            // title='DELIVERED'
-                            // titleStyle = {{backgroundColor: '#266A2E', color: 'white', padding: 10}}
+                            <Card
+                                title={statusUC}
+                                titleStyle = {{backgroundColor: cardBgColor[statusUC], color: 'white', padding: 10}}
+                                // title='CANCELLED'
+                                // titleStyle = {{backgroundColor: 'tomato', color: 'white', padding: 10}}
+                                // title='CONFIRMED'
+                                // titleStyle = {{backgroundColor: '#79BEDB', color: 'white', padding: 10}}
+                                // title='DELIVERED'
+                                // titleStyle = {{backgroundColor: '#266A2E', color: 'white', padding: 10}}
 
-                            >
-                            <View style={{flexDirection: 'row',justifyContent: 'space-between', marginBottom: 15}}>
-                                <Text style={{fontSize: 16}}>Order Date:</Text>
-                                <Text style={{fontSize: 16}}>December 16 2019</Text>
-                            </View>
-                            <View style={{flexDirection: 'row',justifyContent: 'space-between', marginBottom: 15}}>
-                                <Text style={{fontSize: 16}}>Store Name:</Text>
-                                <Text style={{fontSize: 16}}>Street Food House</Text>
-                            </View>
-                            <View style={{flexDirection: 'row',justifyContent: 'space-between', marginBottom: 15}}>
-                                <Text style={{fontSize: 16}}>Number of Food Ordered:</Text>
-                                <Text style={{fontSize: 16}}>2</Text>
-                            </View>
-                            <View style={{flexDirection: 'row',justifyContent: 'space-between', marginBottom: 15}}>
-                                <Text style={{fontSize: 16}}>Total Payment:</Text>
-                                <Text style={{fontSize: 16}}>&#8369; 70</Text>
-                            </View>
-                        </Card>
-                                                       
-                         {/* <Text> - {JSON.stringify(item)}</Text> */}
+                                >
+                                <View style={{flexDirection: 'row',justifyContent: 'space-between', marginBottom: 15}}>
+                                    <Text style={{fontSize: 16}}>Order Date:</Text>
+                                    <Text style={{fontSize: 16}}>{item.createdAtMs && `${new Date(item.createdAtMs).toLocaleDateString()} ${new Date(item.createdAtMs).toLocaleTimeString()}`}</Text>
+                                </View>
+                                <View style={{flexDirection: 'row',justifyContent: 'space-between', marginBottom: 15}}>
+                                    <Text style={{fontSize: 16}}>Store Name:</Text>
+                                    <Text style={{fontSize: 16}}>{item.store && item.store.name}</Text>
+                                </View>
+                                <View style={{flexDirection: 'row',justifyContent: 'space-between', marginBottom: 15}}>
+                                    <Text style={{fontSize: 16}}>Number of Items Ordered:</Text>
+                                    <Text style={{fontSize: 16}}>{item.cart && item.cart.length}</Text>
+                                </View>
+                                <View style={{flexDirection: 'row',justifyContent: 'space-between', marginBottom: 15}}>
+                                    <Text style={{fontSize: 16}}>Total Payment:</Text>
+                                    <Text style={{fontSize: 16}}>&#8369; {item.payment && item.payment.total}</Text>
+                                </View>
+                            </Card>
                         </TouchableOpacity>
-                    )}
+                    );
+                    }}
                 />
-                <Button title="Go To Order Details" onPress={() => {this.props.navigation.navigate('OrderHistoryDetails')}}/>
             </View>
         );
     }

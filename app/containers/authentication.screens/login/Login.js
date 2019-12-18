@@ -47,7 +47,7 @@ class Login extends React.Component<> {
           <TextInput
             value={this.state.username}
             onChangeText={text => this.setState({username: text})}
-            placeholder="Email Address"
+            placeholder="Login ID"
             placeholderTextColor = 'white'
             underlineColorAndroid = 'white'
             style={{color: 'white',marginTop: 20, marginBottom: 10, width: '70%'}}

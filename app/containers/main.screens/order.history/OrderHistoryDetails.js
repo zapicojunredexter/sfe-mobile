@@ -5,10 +5,12 @@ import {
   View,
   Button,
   ScrollView,
-  TouchableOpacity
+  TouchableOpacity,
+  Alert
 } from 'react-native';
 import { Card } from 'react-native-elements';
 import { HeaderBackButton } from 'react-navigation';
+import OrderService from '../../../services/orders.service';
 
 
 class Container extends React.Component<> {
@@ -17,27 +19,136 @@ class Container extends React.Component<> {
     })
 
     renderButtons = () => {
-        const canCancel = this.props.userType === 'customer' && true;
-        const canAccept = this.props.userType === 'store' && true;
-        const canStartDelivery = this.props.userType === 'store' && true;
-        const canFinish = this.props.userType === 'store' && true;
+        const order = this.props.navigation.state && this.props.navigation.state.params;
+        if(!order){
+            return null;
+        }
+        const canCancel = this.props.userType === 'customer' && order.status === 'waiting';
+        const canAccept = this.props.userType === 'store' && order.status === 'waiting';
+        const canReject = this.props.userType === 'store' && order.status === 'waiting';
+        const canStartDelivery = this.props.userType === 'store' && order.status === 'accepted';
+        const canFinish = this.props.userType === 'store' && order.status === 'delivery';
         return (
             <React.Fragment>
                 {canCancel && <Button
                     title="Cancel Order"
-                    onPress={() => {}}
+                    onPress={() => {
+                        Alert.alert(
+                            'Cancel Order',
+                            'Are you sure you want to cancel your order?',
+                            [
+                                {
+                                    text: 'Yes',
+                                    onPress: () => {
+                                        OrderService.update(order.id, {status: 'cancelled'})();
+                                        this.props.navigation.goBack(null);
+                                    }
+                                },
+                              {
+                                text: 'No',
+                                onPress: () => console.log('Cancel Pressed'),
+                                style: 'cancel',
+                              },
+                            ],
+                            {cancelable: true},
+                        );
+                    }}
                 />}
                 {canAccept && <Button
                     title="Accept"
-                    onPress={() => {}}
+                    onPress={() => {
+                        Alert.alert(
+                            'Accept Order',
+                            'Are you sure you want to accept order?',
+                            [
+                                {
+                                    text: 'Yes',
+                                    onPress: () => {
+                                        OrderService.update(order.id, {status: 'accepted'})();
+                                        this.props.navigation.goBack(null);
+                                    }
+                                },
+                              {
+                                text: 'No',
+                                onPress: () => console.log('Cancel Pressed'),
+                                style: 'cancel',
+                              },
+                            ],
+                            {cancelable: true},
+                        );
+                    }}
+                />}
+                {canReject && <Button
+                    title="Reject"
+                    onPress={() => {
+                        Alert.alert(
+                            'Reject Order',
+                            'Are you sure you want to reject order?',
+                            [
+                                {
+                                    text: 'Yes',
+                                    onPress: () => {
+                                        OrderService.update(order.id, {status: 'rejected'})();
+                                        this.props.navigation.goBack(null);
+                                    }
+                                },
+                              {
+                                text: 'No',
+                                onPress: () => console.log('Cancel Pressed'),
+                                style: 'cancel',
+                              },
+                            ],
+                            {cancelable: true},
+                        );
+                    }}
                 />}
                 {canStartDelivery && <Button
                     title="Start Delivery"
-                    onPress={() => {}}
+                    onPress={() => {
+                        Alert.alert(
+                            'Start Delivery',
+                            'Are you sure you want to Start delivery?',
+                            [
+                                {
+                                    text: 'Yes',
+                                    onPress: () => {
+                                        OrderService.update(order.id, {status: 'delivery'})();
+                                        this.props.navigation.goBack(null);
+                                    }
+                                },
+                              {
+                                text: 'No',
+                                onPress: () => console.log('Cancel Pressed'),
+                                style: 'cancel',
+                              },
+                            ],
+                            {cancelable: true},
+                        );
+                    }}
                 />}
                 {canFinish && <Button
                     title="Finish"
-                    onPress={() => {}}
+                    onPress={() => {
+                        Alert.alert(
+                            'Finish Transaction',
+                            'Are you sure you want to Finish transaction?',
+                            [
+                                {
+                                    text: 'Yes',
+                                    onPress: () => {
+                                        OrderService.update(order.id, {status: 'delivered'})();
+                                        this.props.navigation.goBack(null);
+                                    }
+                                },
+                              {
+                                text: 'No',
+                                onPress: () => console.log('Cancel Pressed'),
+                                style: 'cancel',
+                              },
+                            ],
+                            {cancelable: true},
+                        );
+                    }}
                 />}
             </React.Fragment>
         );
@@ -45,41 +156,49 @@ class Container extends React.Component<> {
 
     render() {
         const order = this.props.navigation.state && this.props.navigation.state.params;
+        if(!order){
+            return null;
+        }
+        const statusUC = order.status && order.status.toUpperCase() || 'wala';
+        const cardBgColor = {
+            'CANCELLED': 'tomato',
+            'WAITING': 'lime',
+            'ACCEPTED': '#79BEDB',
+            'REJECTED': 'tomato',
+            'DELIVERY': '#266A2E',
+            'DELIVERED': '#266A2E',
+        };
         return (
             <View style={{flex: 1}}>
-                {/* <Text>src/containers/main.screens/order.history/OrderHistoryDetails.js</Text> */}
                 <ScrollView>
-                    <Card title='WAITING' titleStyle = {{backgroundColor: '#FF9900', color: 'white', padding: 10}}>
+                    <Card title={statusUC} titleStyle = {{backgroundColor: cardBgColor[statusUC], color: 'white', padding: 10}}>
                         <View style={{flexDirection: 'row',justifyContent: 'space-between', marginBottom: 15}}>
                             <Text style={{fontSize: 16}}>Order Date:</Text>
-                            <Text style={{fontSize: 16}}>December 16 2019</Text>
+                            <Text style={{fontSize: 16}}>{order.createdAtMs && `${new Date(order.createdAtMs).toLocaleDateString()} ${new Date(order.createdAtMs).toLocaleTimeString()}`}</Text>
                         </View>
                         <View style={{flexDirection: 'row',justifyContent: 'space-between', marginBottom: 15}}>
                             <Text style={{fontSize: 16}}>Store Name:</Text>
-                            <Text style={{fontSize: 16}}>Street Food House</Text>
+                            <Text style={{fontSize: 16}}>{order.store && order.store.name}</Text>
                         </View>
                         <View style={{flexDirection: 'row',justifyContent: 'space-between', marginBottom: 15}}>
                             <Text style={{fontSize: 16}}>Order Details:</Text>
                         </View>
                         <View style={{paddingLeft: 10, marginBottom: 15}}>
-                            <View style={{flexDirection: 'row',justifyContent: 'space-around', marginBottom: 10}}>
-                                <Text style={{fontSize: 14}}>Kwek-Kwek</Text>
-                                <Text style={{fontSize: 14}}>6 pieces</Text>
-                                <Text style={{fontSize: 14}}>&#8369; 20</Text>
-                            </View>
-                            <View style={{flexDirection: 'row',justifyContent: 'space-around', marginBottom: 10}}>
-                                <Text style={{fontSize: 14}}>Tempura</Text>
-                                <Text style={{fontSize: 14}}>6 pieces</Text>
-                                <Text style={{fontSize: 14}}>&#8369; 20</Text>
-                            </View>
+
+                            {order.cart.map(cart => (
+                                <View style={{flexDirection: 'row',justifyContent: 'space-around', marginBottom: 10}}>
+                                    <Text style={{fontSize: 14}}>{cart.itemName} ({cart.orderQty}) </Text>
+                                    <Text style={{fontSize: 14}}>&#8369; {cart.price}</Text>
+                                </View>
+                            ))}
                         </View>
                         <View style={{flexDirection: 'row',justifyContent: 'space-between', marginBottom: 15}}>
                             <Text style={{fontSize: 16}}>SubTotal:</Text>
-                            <Text style={{fontSize: 16}}>&#8369; 40</Text>
+                            <Text style={{fontSize: 16}}>&#8369; {order.payment && order.payment.subtotal}</Text>
                         </View>
                         <View style={{flexDirection: 'row',justifyContent: 'space-between', marginBottom: 15}}>
                             <Text style={{fontSize: 16}}>Delivery Fee:</Text>
-                            <Text style={{fontSize: 16}}>&#8369; 30</Text>
+                            <Text style={{fontSize: 16}}>&#8369; {order.payment && order.payment.deliveryFee}</Text>
                         </View>
                         <View
                         style={{
@@ -89,7 +208,7 @@ class Container extends React.Component<> {
                          />
                         <View style={{flexDirection: 'row',justifyContent: 'space-between', marginTop: 15}}>
                             <Text style={{fontSize: 18, fontWeight: 'bold', color: 'tomato'}}>Total Payment:</Text>
-                            <Text style={{fontSize: 18, fontWeight: 'bold', color: 'tomato'}}>&#8369; 70</Text>
+                            <Text style={{fontSize: 18, fontWeight: 'bold', color: 'tomato'}}>&#8369; {order.payment && order.payment.total}</Text>
                         </View>
                         
                     </Card>
