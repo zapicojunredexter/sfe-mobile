@@ -187,6 +187,9 @@ class Container extends React.Component<> {
                                         <Image
                                             style = {{width: 100 , height: 100, borderRadius: 100/2 }}
                                             source={require('../../../assets/images/kwekwek.jpg')}
+                                            source={{
+                                                uri: item.imgUrl,
+                                            }}
                                         />
                                         <View>
                                                 <Text style={{marginBottom: 2, fontSize: 16, fontWeight: 'bold'}}>{item.name}</Text>
