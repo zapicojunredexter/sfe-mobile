@@ -14,7 +14,7 @@ import { HeaderBackButton } from 'react-navigation';
 import ConfirmOrderModal from './modals/ConfirmOrderModal';
 import OrderService from '../../../services/orders.service';
 import CartActions from '../../../reducers/cart/cart.action';
-
+var stripe = require('stripe-client')('YOUR_PUBLISHABLE_STRIPE_API_KEY');
 
 class Container extends React.Component<> {
     static navigationOptions = ({ navigation }) => ({
@@ -39,9 +39,26 @@ class Container extends React.Component<> {
             this.setState({store});
         }
     }
-    submitOrder = () => {
+    submitOrder = async () => {
         const {cartItems, contactNumber} = this.props;
+        let stripeToken = undefined;
         const { store, paymentType, noteText, deliveryAddress } = this.state;
+        if(paymentType==='CC'){
+            const stripeResponse = await stripe.createToken({
+                card: {
+                "number": '4242424242424242',
+                "exp_month": 12,
+                "exp_year": 2018,
+                "cvc": '123'
+                }
+            })
+            .then(res => res).catch(err => err);
+            if(stripeResponse.error){
+                alert(stripeResponse.error.message);
+                return;
+            }
+            stripeToken = stripeResponse.id;
+        }
         const cartArray = Object.values(cartItems);
         const subtotal = cartArray.reduce((acc, cur) => {
             return acc + (cur.price * cur.orderQty);
@@ -73,7 +90,8 @@ class Container extends React.Component<> {
                 subtotal,
                 total,
                 deliveryFee
-            }
+            },
+            stripeToken
         };
         this.props.submitOrder(payload)
             .then(() => {
