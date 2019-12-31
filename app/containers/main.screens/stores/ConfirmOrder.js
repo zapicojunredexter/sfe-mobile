@@ -21,13 +21,17 @@ class Container extends React.Component<> {
         headerLeft: <HeaderBackButton onPress={() => navigation.pop(2)} />,
     });
 
-    state = {
-        store: null,
-        isConfirmed: false,
-        deliveryAddress: 'Talisay City',
-        noteText: 'Sample notes or additional information here',
-        paymentType: 'COD',
-    };
+    constructor(props){
+        super(props);
+        const { address } = props;
+        this.state = {
+            store: null,
+            isConfirmed: false,
+            deliveryAddress: address,
+            noteText: '',
+            paymentType: 'COD',
+        }
+    }
 
     componentDidMount(){
         const store = this.props.navigation.state && this.props.navigation.state.params;
@@ -36,13 +40,13 @@ class Container extends React.Component<> {
         }
     }
     submitOrder = () => {
-        const {cartItems} = this.props;
+        const {cartItems, contactNumber} = this.props;
         const { store, paymentType, noteText, deliveryAddress } = this.state;
         const cartArray = Object.values(cartItems);
         const subtotal = cartArray.reduce((acc, cur) => {
             return acc + (cur.price * cur.orderQty);
         }, 0);
-        const deliveryFee = 0;
+        const deliveryFee = store && store.deliveryFee || 0;
         const total = subtotal + deliveryFee;
         const cart = cartArray.map(crt => ({
             itemId: crt.id,
@@ -61,6 +65,7 @@ class Container extends React.Component<> {
             },
             cart,
             status: 'waiting',
+            contactNumber,
             note: noteText,
             deliveryAddress,
             payment: {
@@ -82,13 +87,13 @@ class Container extends React.Component<> {
 
 
     render() {
-        const {cartItems, name} = this.props;
-        const contactNumber = '';
+        const {cartItems, name, contactNumber} = this.props;
+        const { store } = this.state;
         const cartArray = Object.values(cartItems);
         const subtotal = cartArray.reduce((acc, cur) => {
             return acc + (cur.price * cur.orderQty);
         }, 0);
-        const deliveryFee = 0;
+        const deliveryFee = store && store.deliveryFee || 0;
         const total = subtotal + deliveryFee;
         const isConfirmed = this.state.isConfirmed
         const noteText = this.state.noteText
@@ -120,11 +125,42 @@ class Container extends React.Component<> {
                             <Text style={{fontSize: 16, marginBottom: 10}}>Payment Type</Text>
                         </View>
                         <ButtonGroup
-                            // onPress={index => alert(index)}
-                            selectedIndex={0}
+                            onPress={index => this.setState({paymentType: index === 0 ? 'COD' : 'CC'})}
+                            selectedIndex={this.state.paymentType === 'COD' ? 0 : 1}
                             // buttonStyle = {{backgroundColor: 'tomato', color: 'white'}}
                             buttons={[<Text>COD</Text>,<Text>Credit Card</Text>]}
                             containerStyle={{height: 50, marginBottom: 10}} />
+                        {this.state.paymentType === 'CC' && (
+                            <React.Fragment>
+                                <View>
+                                    <Text style={{fontSize: 16}}>Card Details</Text>
+                                </View>
+                                <View>
+                                    <TextInput
+                                        placeholder={"Card Number"}
+                                        onChangeText={(noteText) => this.setState({noteText})}
+                                        // value={this.state.noteText}
+                                        style = {{marginBottom: 10}}/>
+                                </View>
+                                <View style={{flexDirection:'row'}}>
+                                    <TextInput
+                                        placeholder={"CVC"}
+                                        onChangeText={(noteText) => this.setState({noteText})}
+                                        // value={this.state.noteText}
+                                        style = {{width: '50%', marginRight: '3%'}}/>
+                                    <TextInput
+                                        placeholder={"00"}
+                                        onChangeText={(noteText) => this.setState({noteText})}
+                                        // value={this.state.noteText}
+                                        style = {{width: '22%', marginRight: '3%'}}/>
+                                    <TextInput
+                                        placeholder={"00"}
+                                        onChangeText={(noteText) => this.setState({noteText})}
+                                        // value={this.state.noteText}
+                                        style = {{width: '22%'}}/>
+                                </View>
+                            </React.Fragment>
+                        )}
                         <View>
                             <Text style={{fontSize: 16}}>Note</Text>
                         </View>
@@ -255,6 +291,8 @@ class Container extends React.Component<> {
 const mapStateToProps = store => ({
     userId: store.userStore.user && store.userStore.user.id,
     name: store.userStore.user && store.userStore.user.name,
+    address: store.userStore.user && store.userStore.user.address,
+    contactNumber: store.userStore.user && store.userStore.user.contactNumber,
     cartItems: store.cartStore.cartItems,
 });
 const mapDispatchToProps = dispatch => ({
