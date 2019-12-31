@@ -30,7 +30,8 @@ class Container extends React.Component<> {
     render() {
         return (
             <View>
-                <Text>src/containers/main.screens/products/Products.js</Text>
+                
+                <Button title="Add Product" onPress={() => this.props.navigation.navigate('AddProduct')}/>
                 <FlatList
                     data={this.state.products}
                     refreshing={this.state.isFetching}
@@ -45,7 +46,6 @@ class Container extends React.Component<> {
                         </TouchableOpacity>
                     )}
                 />
-                <Button title="Add Product" onPress={() => this.props.navigation.navigate('AddProduct')}/>
             </View>
         );
     }

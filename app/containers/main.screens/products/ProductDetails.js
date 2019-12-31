@@ -5,11 +5,14 @@ import {
   View,
   Button,
   FlatList,
-  TouchableOpacity
+  TouchableOpacity,
+  TextInput,
+  Image
 } from 'react-native';
+import ImagePicker from 'react-native-image-picker';
 import { HeaderBackButton } from 'react-navigation';
-import ProductsService from '../../../services/products.service';
-import CartActions from '../../../reducers/cart/cart.action';
+import ProductsServices from '../../../services/products.service';
+import StorageService from '../../../services/storage.service';
 
 
 class Container extends React.Component<> {
@@ -17,28 +20,125 @@ class Container extends React.Component<> {
         headerLeft: <HeaderBackButton onPress={() => navigation.goBack(null)} />,
     });
 
-    state = {
-        product: null,
-    }
-
-    listener = null;
-
-    componentDidMount(){
+    constructor(props) {
+        super(props);
         const product = this.props.navigation.state && this.props.navigation.state.params;
-        this.setState({product});
+        this.state = {
+            imgUrl: product && product.imgUrl || '',
+            name: product && product.name ||  '',
+            description: product && product.description ||  '',
+            stockQty: product && Number(product.stockQty).toString() ||  1,
+            price: product && Number(product.price).toString() ||  0,
+            serving: product && product.serving ||  '',
+        };
     }
+
+    addFile = () => {
+        ImagePicker.showImagePicker(null, response => {
+            console.log('Response = ', response);
+        
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            } else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+            } else if (response.customButton) {
+                console.log('User tapped custom button: ', response.customButton);
+            } else {
+                let source = response;
+                const { uri } = response;
+                // You can also display the image using data:
+                // let source = { uri: 'data:image/jpeg;base64,' + response.data };
+                StorageService.uploadFile([uri])()
+                    .then((res) => {
+                        this.setState({
+                            imgUrl: res[0],
+                        });
+                    })
+                    .catch(err => alert(err.message));
+            }
+        });
+    };
+
+    submitProduct = () => {
+        const product = this.props.navigation.state && this.props.navigation.state.params;
+        const payload = {
+            name: this.state.name,
+            description: this.state.description,
+            stockQty: Number(this.state.stockQty),
+            price: Number(this.state.price),
+            serving: this.state.serving,
+            imgUrl: this.state.imgUrl,
+            store: {
+                name: this.props.storeName,
+                id: this.props.userId,
+            },
+        };
+        if(product){
+            ProductsServices.update(product.id, payload)()
+                .then(() => {
+                    alert('successfully updated product');
+                    this.props.navigation.goBack(null);
+                })
+                .catch(err => alert(err.message));
+        }
+    }
+
     render() {
-        const { product } = this.state;
         return (
             <View>
-                <Text>src/containers/main.screens/products/ProductDetails.js</Text>
-                <Text>{JSON.stringify(product)}</Text>
-                <Button title="Edit" onPress={() => {}}/>
+                <Text>src/containers/main.screens/products/AddProduct.js</Text>
+                <TextInput
+                    value={this.state.name}
+                    onChangeText={text => this.setState({name: text})}
+                    placeholder={"name"}
+                />
+                <TouchableOpacity
+                    style={{alignItems:'center'}}
+                    onPress={this.addFile}
+                >
+                    <Image
+                        source={this.state.imgUrl ? {
+                            uri: this.state.imgUrl
+                        } : require('../../../assets/images/no-image.png')}
+                        style={{height: 150, width:150}}
+                        onPress={this.addFile}
+                    />
+                </TouchableOpacity>
+                <TextInput
+                    value={this.state.description}
+                    onChangeText={text => this.setState({description: text})}
+                    placeholder={"description"}
+                />
+                <TextInput
+                    value={this.state.stockQty}
+                    onChangeText={text => this.setState({stockQty: text})}
+                    placeholder={"Stock Qty"}
+                    // keyboardType="numeric"
+                />
+                <TextInput
+                    value={this.state.price}
+                    onChangeText={text => this.setState({price: text})}
+                    placeholder={"price"} 
+                    // keyboardType="numeric"
+
+                />
+                <TextInput
+                    value={this.state.serving}
+                    onChangeText={text => this.setState({serving: text})}
+                    placeholder={"serving"}
+                />
+                
+                <Button
+                    title="SUBMIT"
+                    onPress={this.submitProduct}
+                />
             </View>
         );
     }
 }
 const mapStateToProps = store => ({
+    userId: store.userStore.user && store.userStore.user.id,
+    storeName: store.userStore.user && store.userStore.user.name,
 });
 const mapDispatchToProps = dispatch => ({
 });

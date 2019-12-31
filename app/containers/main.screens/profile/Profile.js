@@ -14,11 +14,20 @@ class Container extends React.Component<> {
         headerTitle : '',
     };
 
-    state = {
-        isEdited: false
+    constructor(props){
+        super(props)
+        const { user } = props;
+        this.state = {
+            isEdited: false,
+            username: user && user.username || '',
+            password: user && user.password || '',
+            name: user && user.name || '',
+            contactNumber: user && user.contactNumber || '',
+            address: user && user.address || '',
+        }
     }
+
     render() {
-        
         const isEdited = this.state.isEdited
         return (
             <View style={{flex: 1}}>
@@ -26,14 +35,18 @@ class Container extends React.Component<> {
                 <ScrollView>
                    <Card>
                         <TextInput
-                            value="juanluna@gmail.com"
-                            placeholder="Email Address"
+                            placeholder="username"
+                            value={this.state.username}
+                            onChangeText={text => this.setState({username: text})}
                             style={{color: 'tomato',marginBottom: 10}}
                         />
                         <TextInput
-                            placeholder="Password"
+                            placeholder="password"
+                            value={this.state.password}
+                            onChangeText={text => this.setState({password: text})}
                             style={{color: 'tomato',marginBottom: 10}}
                         />
+                        {/*
                         <TextInput
                             placeholder="New Password"
                             style={{color: 'tomato',marginBottom: 10}}
@@ -52,14 +65,25 @@ class Container extends React.Component<> {
                             placeholder="Last Name"
                             style={{color: 'tomato',marginBottom: 10}}
                         />
+                        */}
+                        
                         <TextInput
-                            value="09123123321"
-                            placeholder="Contact Number"
+                            placeholder="name"
+                            value={this.state.name}
+                            editable={false}
+                            onChangeText={text => this.setState({name: text})}
                             style={{color: 'tomato',marginBottom: 10}}
                         />
                         <TextInput
-                            value="123 IDK street, Labangon, Cebu City"
-                            placeholder="Delivery Address"
+                            placeholder="contactNumber"
+                            value={this.state.contactNumber}
+                            onChangeText={text => this.setState({contactNumber: text})}
+                            style={{color: 'tomato',marginBottom: 10}}
+                        />
+                        <TextInput
+                            placeholder="address"
+                            value={this.state.address}
+                            onChangeText={text => this.setState({address: text})}
                             style={{color: 'tomato',marginBottom: 10}}
                         />
 
@@ -74,11 +98,12 @@ class Container extends React.Component<> {
                             justifyContent: 'space-between',
                             marginTop: 15
                         }}>
-                            <Text style={{marginBottom: 10}}>Email Address:</Text>
+                            <Text style={{marginBottom: 10}}>Login ID:</Text>
                             <Text>
-                                <Text>juanluna@gmail.com</Text>
+                                <Text>{this.state.username}</Text>
                             </Text>
                         </View>
+                        {/*
                         <View style={{
                             flexDirection: 'row',
                             justifyContent: 'space-between',
@@ -89,14 +114,16 @@ class Container extends React.Component<> {
                                 <Text>Juan</Text>
                             </Text>
                         </View>
+                        */}
+                        
                         <View style={{
                             flexDirection: 'row',
                             justifyContent: 'space-between',
                             marginTop: 15
                         }}>
-                            <Text style={{marginBottom: 10}}>Last Name:</Text>
+                            <Text style={{marginBottom: 10}}>Name:</Text>
                             <Text>
-                                <Text>Luna</Text>
+                                <Text>{this.state.name}</Text>
                             </Text>
                         </View>
                         <View style={{
@@ -106,11 +133,11 @@ class Container extends React.Component<> {
                         }}>
                             <Text style={{marginBottom: 10}}>Contact Number:</Text>
                             <Text>
-                                <Text>09123123321</Text>
+                                <Text>{this.state.contactNumber}</Text>
                             </Text>
                         </View>
                         <Text style={{marginBottom: 10, marginTop: 15}}>Address:</Text>
-                        <Text style={{textAlign: 'right'}}>123 IDK street, Labangon, Cebu City</Text>
+                        <Text style={{textAlign: 'right'}}>{this.state.address}</Text>
                         <Text onPress={() => {this.setState({isEdited: true})}} style={{marginTop: 50, color: 'tomato', textAlign: 'right', marginBottom: 20}}>Edit Profile</Text>
                     </Card>
                        
@@ -125,6 +152,7 @@ class Container extends React.Component<> {
     }
 }
 const mapStateToProps = store => ({
+    user: store.userStore.user
 });
 const mapDispatchToProps = dispatch => ({
 });
