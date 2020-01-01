@@ -56,13 +56,15 @@ class Container extends React.Component<> {
         return (
             <View style={{flex: 1}}>
                 <ImageBackground
-                source={require('../../../assets/images/sample.png')}
-                style={{
-                    height: 170,
-                    width: 450,
-                   
-                    backgroundColor: 'black'
-                }}
+                    source={(store && store.displayPicUrl) ? {
+                        uri: store.displayPicUrl,
+                    } : require('../../../assets/images/default-bg.jpg')}
+                    style={{
+                        height: 170,
+                        width: 450,
+                    
+                        backgroundColor: 'black'
+                    }}
                 >
                 <View
                     style={{

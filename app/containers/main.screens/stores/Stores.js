@@ -40,11 +40,6 @@ class Container extends React.Component<> {
     render() {
         const { search } = this.state;
 
-        const sampleStores = [
-            { name: "hello store one"},
-            { name: "hello store two"}
-        ]
-
         return (
             <View  style = {{ flex: 1}}>
                 <SearchBar style={{backgroundColor: 'transparent'}}
@@ -78,7 +73,9 @@ class Container extends React.Component<> {
                         <Card>
                             <Image
                                 style = {{width: 350 , height: 170, backgroundColor: 'black'}}
-                                source={require('../../../assets/images/sample.png')}
+                                source={(item && item.displayPicUrl) ? {
+                                    uri: item.displayPicUrl,
+                                } : require('../../../assets/images/default-bg.jpg')}
                             />
                             <View style={{
                                 flex: 1,
