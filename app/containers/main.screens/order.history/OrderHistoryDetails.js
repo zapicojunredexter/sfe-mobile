@@ -6,8 +6,11 @@ import {
   Button,
   ScrollView,
   TouchableOpacity,
-  Alert
+  Alert,
+  Linking,
+  Platform 
 } from 'react-native';
+
 import { Card } from 'react-native-elements';
 import { HeaderBackButton } from 'react-navigation';
 import OrderService from '../../../services/orders.service';
@@ -28,8 +31,24 @@ class Container extends React.Component<> {
         const canReject = this.props.userType === 'store' && order.status === 'waiting';
         const canStartDelivery = this.props.userType === 'store' && order.status === 'accepted';
         const canFinish = this.props.userType === 'store' && order.status === 'delivery';
+        const canSendSms = this.props.userType === 'store' && order.status;
         return (
             <React.Fragment>
+                {canSendSms && <Button
+                    title="Send SMS"
+                    onPress={() => {
+                        const url = (Platform.OS === 'android')
+                        ? `sms:${order.contactNumber}`
+                        : `sms:${order.contactNumber}`
+                        Linking.canOpenURL(url).then(supported => {
+                            if (!supported) {
+                                console.log('Unsupported url: ' + url)
+                            } else {
+                                return Linking.openURL(url)
+                            }
+                        }).catch(err => console.error('An error occurred', err))
+                    }}
+                />}
                 {canCancel && <Button
                     title="Cancel Order"
                     onPress={() => {
