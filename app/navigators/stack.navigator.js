@@ -11,6 +11,7 @@ import Products from '../containers/main.screens/products/Products';
 import ProductDetails from '../containers/main.screens/products/ProductDetails';
 import AddProduct from '../containers/main.screens/products/AddProduct';
 import Feedbacks from '../containers/main.screens/feedbacks/Feedbacks';
+import AddFeedback from '../containers/main.screens/feedbacks/AddFeedback';
 import StoreDetails from '../containers/main.screens/stores/StoreDetails';
 import ConfirmOrder  from '../containers/main.screens/stores/ConfirmOrder';
 import Login from '../containers/authentication.screens/login/Login';
@@ -90,7 +91,7 @@ const MainStack = createDrawerNavigator({
         },
     },
     OrderHistory: {
-        screen: createStackWithNotifIcon({OrderHistory, OrderHistoryDetails}),
+        screen: createStackWithNotifIcon({OrderHistory, OrderHistoryDetails, AddFeedback}),
         navigationOptions: {
             drawerLabel: 'OrderHistory',
             // drawerIcon: () => (

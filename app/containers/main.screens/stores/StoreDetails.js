@@ -15,6 +15,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { HeaderBackButton } from 'react-navigation';
 import ProductsService from '../../../services/products.service';
 import CartActions from '../../../reducers/cart/cart.action';
+import FeedbacksService from '../../../services/feedbacks.service';
 
 
 class Container extends React.Component<> {
@@ -25,7 +26,8 @@ class Container extends React.Component<> {
     state = {
         store: null,
         products: [],
-        tabIndex: 0
+        tabIndex: 0,
+        feedbacks: []
     }
 
     listener = null;
@@ -37,6 +39,10 @@ class Container extends React.Component<> {
             this.listener = ProductsService.createStoreProductsListener(store.id, (data) => {
                 this.setState({products: data});
             });
+
+            FeedbacksService.fetchStoreFeedbacks(store.id)()
+                .then((feedbacks) => this.setState({feedbacks}))
+                .catch(() => {});
         }
     }
     render() {
@@ -46,25 +52,6 @@ class Container extends React.Component<> {
         const totalCart = cartArray.reduce((acc, cur) => {
             return acc + cur.price;
         }, 0);
-
-        const sampleReviews = [
-            {
-                name: 'Review 1',
-               
-            },
-            {
-                name: 'Review 2',
-               
-            },
-            {
-                name: 'Review 3',
-               
-            },
-            {
-                name: 'Review 4',
-               
-            }
-        ]
 
         return (
             <View style={{flex: 1}}>
@@ -110,7 +97,7 @@ class Container extends React.Component<> {
                         }}
                     >
                     <Icon name={'star'}  color="tomato" size={20}></Icon>
-                    <Text style={{color: 'tomato'}}>4.6 (10)</Text>
+                    <Text style={{color: 'tomato'}}>{store && ((store.score && store.score.total || 0) / (store.score && store.score.count || 0)).toFixed(1)} ({store && (store.score && store.score.count || 0)})</Text>
                     </Text>
                 </View>
                 </ImageBackground>
@@ -340,21 +327,20 @@ class Container extends React.Component<> {
 
                 {tabIndex == 2 && (
                       <FlatList
-                        data={ sampleReviews }
+                        data={ this.state.feedbacks }
                         extraData={this.props.cartItems}
                         renderItem={({item}) => {
                             const isInCart = !!this.props.cartItems[item.id];
                             return (
                                 <TouchableOpacity style={{marginBottom: 15}} >
                                  <Card>
-                                   <Text style={{marginBottom: 5, fontSize: 16}}> Name: Juan Luna </Text>
+                                   <Text style={{marginBottom: 5, fontSize: 16}}> Name: {item.reviewer && item.reviewer.name} </Text>
                                    <Text style={{marginBottom: 5}}>
-                                     <Icon name={'star'}  color="tomato" size={15}/>
-                                     <Icon name={'star'}  color="tomato" size={15}/>
-                                     <Icon name={'star'}  color="tomato" size={15}/>
+                                     {new Array(item.rating || 0).fill(null).map(item => (
+                                        <Icon name={'star'}  color="tomato" size={15}/>
+                                     ))}
                                    </Text>
-                                   <Text style={{marginBottom: 5, fontSize: 14}}>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet,
-                                    consectetur, adipisci velit</Text>
+                                    <Text style={{marginBottom: 5, fontSize: 14}}>{item.review}</Text>
                                   
                                 </Card>    
                              </TouchableOpacity>

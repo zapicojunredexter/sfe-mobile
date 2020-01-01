@@ -93,7 +93,7 @@ class Container extends React.Component<> {
                                 </Text>
                                 <Text>
                                     <Icon name={'star'}  color="tomato" size={15}></Icon>
-                                    <Text>4.6 (10)</Text>
+                                    <Text>{((item.score && item.score.total || 0) / (item.score && item.score.count || 0)).toFixed(1)} ({item.score && item.score.count || 0})</Text>
                                 </Text>
                             </View>
                             <Text style={{fontSize: 14, color: 'tomato', marginBottom: 15}}>&#8369; {item.deliveryFee || 0} Delivery Fee</Text>

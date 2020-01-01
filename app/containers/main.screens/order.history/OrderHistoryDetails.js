@@ -32,8 +32,15 @@ class Container extends React.Component<> {
         const canStartDelivery = this.props.userType === 'store' && order.status === 'accepted';
         const canFinish = this.props.userType === 'store' && order.status === 'delivery';
         const canSendSms = this.props.userType === 'store' && order.status;
+        const canFeedback = this.props.userType === 'customer' && order.status === 'delivered';
         return (
             <React.Fragment>
+                {canFeedback && <Button
+                    title="Submit Review"
+                    onPress={() => {
+                        this.props.navigation.navigate('AddFeedback', order)
+                    }}
+                />}
                 {canSendSms && <Button
                     title="Send SMS"
                     onPress={() => {
