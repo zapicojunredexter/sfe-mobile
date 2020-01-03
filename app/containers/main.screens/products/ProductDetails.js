@@ -7,8 +7,10 @@ import {
   FlatList,
   TouchableOpacity,
   TextInput,
-  Image
+  Image,
+  ScrollView
 } from 'react-native';
+import { Card } from 'react-native-elements';
 import ImagePicker from 'react-native-image-picker';
 import { HeaderBackButton } from 'react-navigation';
 import ProductsServices from '../../../services/products.service';
@@ -86,52 +88,62 @@ class Container extends React.Component<> {
     render() {
         return (
             <View>
-                <Text>src/containers/main.screens/products/AddProduct.js</Text>
-                <TextInput
-                    value={this.state.name}
-                    onChangeText={text => this.setState({name: text})}
-                    placeholder={"name"}
-                />
-                <TouchableOpacity
-                    style={{alignItems:'center'}}
-                    onPress={this.addFile}
-                >
-                    <Image
-                        source={this.state.imgUrl ? {
-                            uri: this.state.imgUrl
-                        } : require('../../../assets/images/no-image.png')}
-                        style={{height: 150, width:150}}
-                        onPress={this.addFile}
-                    />
-                </TouchableOpacity>
-                <TextInput
-                    value={this.state.description}
-                    onChangeText={text => this.setState({description: text})}
-                    placeholder={"description"}
-                />
-                <TextInput
-                    value={this.state.stockQty}
-                    onChangeText={text => this.setState({stockQty: text})}
-                    placeholder={"Stock Qty"}
-                    // keyboardType="numeric"
-                />
-                <TextInput
-                    value={this.state.price}
-                    onChangeText={text => this.setState({price: text})}
-                    placeholder={"price"} 
-                    // keyboardType="numeric"
+                {/* <Text>src/containers/main.screens/products/AddProduct.js</Text> */}
+                <ScrollView>
+                    <Card  style={{ justifyContent: 'center', alignItems: 'center', top: '2%', marginBottom: 10}}>
+                        <TextInput
+                        value={this.state.name}
+                        onChangeText={text => this.setState({name: text})}
+                        placeholder={"Name"}
+                        style={{color: 'tomato',marginBottom: 10, fontWeight: 'bold'}}
+                        />
+                        <TouchableOpacity
+                            style={{alignItems:'center'}}
+                            onPress={this.addFile}
+                        >
+                            <Image
+                                source={this.state.imgUrl ? {
+                                    uri: this.state.imgUrl
+                                } : require('../../../assets/images/no-image.png')}
+                                style={{height: 150, width:150}}
+                                onPress={this.addFile}
+                            />
+                        </TouchableOpacity>
+                        <TextInput
+                            value={this.state.description}
+                            onChangeText={text => this.setState({description: text})}
+                            placeholder={"Description"}
+                            style={{color: 'tomato',marginBottom: 10, fontWeight: 'bold'}}
+                        />
+                        <TextInput
+                            value={this.state.stockQty}
+                            onChangeText={text => this.setState({stockQty: text})}
+                            placeholder={"Stock Quantity"}
+                            // keyboardType="numeric"
+                            style={{color: 'tomato',marginBottom: 10, fontWeight: 'bold'}}
+                        />
+                        <TextInput
+                            value={this.state.price}
+                            onChangeText={text => this.setState({price: text})}
+                            placeholder={"Price"} 
+                            // keyboardType="numeric"
+                            style={{color: 'tomato',marginBottom: 10, fontWeight: 'bold'}}
 
-                />
-                <TextInput
-                    value={this.state.serving}
-                    onChangeText={text => this.setState({serving: text})}
-                    placeholder={"serving"}
-                />
-                
-                <Button
-                    title="SUBMIT"
-                    onPress={this.submitProduct}
-                />
+                        />
+                        <TextInput
+                            value={this.state.serving}
+                            onChangeText={text => this.setState({serving: text})}
+                            placeholder={"Serving"}
+                            style={{color: 'tomato',marginBottom: 10, fontWeight: 'bold'}}
+                        />
+                        
+                        <Button
+                            title="Update Product"
+                            onPress={this.submitProduct}
+                        />
+                    </Card>
+                </ScrollView>
+               
             </View>
         );
     }

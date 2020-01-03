@@ -6,7 +6,9 @@ import {
   Button,
   FlatList,
   TouchableOpacity,
+  Image
 } from 'react-native';
+import { Card } from 'react-native-elements';
 import ProductsServices from '../../../services/products.service';
 
 class Container extends React.Component<> {
@@ -29,10 +31,9 @@ class Container extends React.Component<> {
 
     render() {
         return (
-            <View>
-                
-                <Button title="Add Product" onPress={() => this.props.navigation.navigate('AddProduct')}/>
+            <View style = {{ flex: 1}}>
                 <FlatList
+                    style = {{ marginBottom: 20}}
                     data={this.state.products}
                     refreshing={this.state.isFetching}
                     onRefresh={this.fetchProducts}
@@ -42,10 +43,48 @@ class Container extends React.Component<> {
                                 this.props.navigation.navigate('ProductDetails', item)
                             }}
                         >
-                            <Text> - {JSON.stringify(item)}</Text>
+                             <Card
+                                // title='Low Stock'
+                                // titleStyle = {{backgroundColor: 'tomato', color: 'white', padding: 10}}
+                                // title='Out of Stock'
+                                // titleStyle = {{backgroundColor: 'gray', color: 'white', padding: 10}}
+                             >
+                                <View style={{
+                                    flex: 1,
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-around',
+                                    marginTop: 15
+                                }}>
+                                    <Image
+                                        style = {{width: 100 , height: 100, borderRadius: 100/2, marginTop: -10}}
+                                        source={(item && item.imgUrl) ? {
+                                            uri: item.imgUrl,
+                                        } : require('../../../assets/images/default-bg.jpg')}
+                                    />
+                                     {/* <Image
+                                    style = {{width: 100 , height: 100, borderRadius: 100/2 }}
+                                    source={require('../../../assets/images/kwekwek.jpg')}
+                                     /> */}
+                                    <View>
+                                        <Text style={{marginBottom: 2, fontSize: 16, fontWeight: 'bold'}}>{item.name}</Text>
+                                        <Text style={{marginBottom: 2, fontSize: 12}}>{item.description}</Text>
+                                    <Text style={{marginBottom: 2, fontSize: 14, color: 'tomato'}}>{item.stockQty} {item.serving}</Text>
+                                    </View>
+                                    
+                                </View>
+                            </Card>    
+                            {/* <Text> - {JSON.stringify(item)}</Text> */}
                         </TouchableOpacity>
                     )}
+                     
                 />
+                 <View style={{padding: 15}}>
+                    <Button 
+                        title="Add New Product" 
+                        onPress={() => this.props.navigation.navigate('AddProduct')}
+                        style = {{ backgroundColor: 'tomato' }}
+                    />
+                 </View>
             </View>
         );
     }

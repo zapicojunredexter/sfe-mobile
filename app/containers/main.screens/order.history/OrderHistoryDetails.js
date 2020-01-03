@@ -188,7 +188,7 @@ class Container extends React.Component<> {
         const statusUC = order.status && order.status.toUpperCase() || 'wala';
         const cardBgColor = {
             'CANCELLED': 'tomato',
-            'WAITING': 'lime',
+            'WAITING': '#2E8B57',
             'ACCEPTED': '#79BEDB',
             'REJECTED': 'tomato',
             'DELIVERY': '#266A2E',
