@@ -29,6 +29,23 @@ class Container extends React.Component<> {
             .catch(err => alert(err.message));
     }
 
+    checkStock = (stock) => {
+        let stocks;
+    
+        if( stock == 0 ){
+            stocks = 'OUT OF STOCK'
+        }
+        else if (stock <= 5)
+        {
+            stocks = 'LOW STOCK'
+        }
+        else{
+            stocks = false
+        }
+       
+    
+        return stocks;
+    }
     render() {
         return (
             <View style = {{ flex: 1}}>
@@ -37,15 +54,22 @@ class Container extends React.Component<> {
                     data={this.state.products}
                     refreshing={this.state.isFetching}
                     onRefresh={this.fetchProducts}
-                    renderItem={({item}) => (
+                    renderItem={({item}) => {
+                        const statusUC = this.checkStock(item.stockQty);
+                        const cardBgColor = {
+                            'LOW STOCK': 'tomato',
+                            'OUT OF STOCK': 'gray',
+                            'false': 'white',
+                        };
+                    return (
                         <TouchableOpacity
                             onPress={() => {
                                 this.props.navigation.navigate('ProductDetails', item)
                             }}
                         >
                              <Card
-                                // title='Low Stock'
-                                // titleStyle = {{backgroundColor: 'tomato', color: 'white', padding: 10}}
+                                title={statusUC}
+                                titleStyle = {{backgroundColor: cardBgColor[statusUC], color: 'white', padding: 10}}
                                 // title='Out of Stock'
                                 // titleStyle = {{backgroundColor: 'gray', color: 'white', padding: 10}}
                              >
@@ -65,7 +89,7 @@ class Container extends React.Component<> {
                                     style = {{width: 100 , height: 100, borderRadius: 100/2 }}
                                     source={require('../../../assets/images/kwekwek.jpg')}
                                      /> */}
-                                    <View>
+                                    <View style={{ width: 160 }}>
                                         <Text style={{marginBottom: 2, fontSize: 16, fontWeight: 'bold'}}>{item.name}</Text>
                                         <Text style={{marginBottom: 2, fontSize: 12}}>{item.description}</Text>
                                     <Text style={{marginBottom: 2, fontSize: 14, color: 'tomato'}}>{item.stockQty} {item.serving}</Text>
@@ -75,7 +99,8 @@ class Container extends React.Component<> {
                             </Card>    
                             {/* <Text> - {JSON.stringify(item)}</Text> */}
                         </TouchableOpacity>
-                    )}
+                    );
+                    }}
                      
                 />
                  <View style={{padding: 15}}>

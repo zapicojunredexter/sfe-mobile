@@ -5,8 +5,10 @@ import {
   View,
   Button,
   TextInput,
+  ScrollView
 } from 'react-native';
-import { Rating, AirbnbRating } from 'react-native-elements';
+import { Card } from 'react-native-elements';
+import { AirbnbRating } from 'react-native-ratings';
 import StoreService from '../../../services/store.service';
 import FeedbacksService from '../../../services/feedbacks.service';
 
@@ -49,6 +51,10 @@ class Container extends React.Component<> {
         
     }
 
+    ratingCompleted( rating ) {
+        console.log( `Rating is: ${rating}` );
+      }
+
     render() {
         const { order } = this.state;
         if(!order)
@@ -56,8 +62,41 @@ class Container extends React.Component<> {
         const { store } = order;
 
         return (
-            <View>
-                <Text>src/containers/main.screens/feedbacks/AddFeedback.js</Text>
+            <View style={{ flex: 1}}>
+                 <ScrollView>
+                    <Card
+                        title = {store.name}
+                        titleStyle = {{ color: 'tomato'}}
+                    >
+                    
+                        {/* <Rating
+                        startingValue={3}
+                        onFinishRating={(rating) => this.setState({rating})}
+                        style = {{marginTop: 15}}
+                        /> */}
+
+                        <AirbnbRating 
+                        showRating={false}
+                        onFinishRating={(rating) => this.setState({rating})}
+                        selectedColor = "tomato"
+                        textColor = "black"
+                        tintColor="white"
+                        style = {{marginTop: 15}}
+                         />          
+
+                        <TextInput
+                        value={this.state.review}
+                        onChangeText={text => this.setState({review: text})}
+                        placeholder = "Write a comment"
+                        style = {{marginTop: 15, marginBottom: 20}}
+                        multiline = { true }
+                        />      
+
+                        <Button title="Done" onPress={this.submitReview}/> 
+                        
+                    </Card>
+                </ScrollView>
+                {/* <Text>src/containers/main.screens/feedbacks/AddFeedback.js</Text>
                 <Text>Review for {store.name}</Text>
                 <Rating
                     startingValue={3}
@@ -70,7 +109,7 @@ class Container extends React.Component<> {
                     onChangeText={text => this.setState({review: text})}
                 />
                 <Text>{JSON.stringify(order)}</Text>
-                <Button title="Click" onPress={this.submitReview}/>
+                <Button title="Click" onPress={this.submitReview}/> */}
             </View>
         );
     }
