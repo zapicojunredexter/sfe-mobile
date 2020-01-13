@@ -95,7 +95,6 @@ export default class Service {
             
             return isEnough ? false : crt;
         }));
-        console.log('ara sila o', hasEnoughOfAll);
 
         const hasInsufficient = hasEnoughOfAll.find(heoa => !!heoa);
         if(hasInsufficient){
