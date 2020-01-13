@@ -8,6 +8,9 @@ import {
   TextInput
 } from 'react-native';
 import { Card } from 'react-native-elements';
+import UserService from '../../../services/user.service';
+import StoreService from '../../../services/store.service';
+import CustomerService from '../../../services/customers.service';
 
 class Container extends React.Component<> {
     static navigationOptions = {
@@ -87,7 +90,34 @@ class Container extends React.Component<> {
                             style={{color: 'tomato',marginBottom: 10}}
                         />
 
-                     <Text onPress={() => {this.setState({isEdited: false})}} style={{marginTop: 50, color: 'tomato', textAlign: 'right', marginBottom: 20}}>Save Changes</Text>
+                     <Text
+                        onPress={async () => {
+                            try {
+
+                                const userId = this.props.user && this.props.user.id;
+                                const userType = this.props.user && this.props.user.type;
+                                const user = {
+                                    username: this.state.username,
+                                    password: this.state.password,
+                                };
+                                await UserService.update(userId, user)();
+                                const details = {
+                                    // name: this.state.name,
+                                    contactNumber: this.state.contactNumber,
+                                    address: this.state.address,
+                                };
+                                if(userType === 'customer') {
+                                    await CustomerService.update(userId, details)();
+                                }
+                                if(userType === 'store') {
+                                    await StoreService.update(userId, details)();
+                                }
+                                alert('successfully updated user')
+                                this.setState({isEdited: false});
+                            } catch (err) {
+                                alert(err.message)
+                            }
+                        }} style={{marginTop: 50, color: 'tomato', textAlign: 'right', marginBottom: 20}}>Save Changes</Text>
                     </Card>
                 </ScrollView>   
                 ) : (
