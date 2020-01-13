@@ -14,6 +14,7 @@ import {
 import { Card } from 'react-native-elements';
 import { HeaderBackButton } from 'react-navigation';
 import OrderService from '../../../services/orders.service';
+import ProductService from '../../../services/products.service';
 
 
 class Container extends React.Component<> {
@@ -89,9 +90,25 @@ class Container extends React.Component<> {
                             [
                                 {
                                     text: 'Yes',
-                                    onPress: () => {
-                                        OrderService.update(order.id, {status: 'accepted'})();
-                                        this.props.navigation.goBack(null);
+                                    onPress: async () => {
+                                        try {
+                                            const { cart } = order;
+                                            const toBeRestocked = cart.map(crt => ({
+                                                id: crt.itemId,
+                                                qty: crt.orderQty,
+                                                name: crt.itemName,
+                                            }));
+
+                                            const res = await ProductService.updateProductStockByCart(toBeRestocked)
+                                            if(res){
+                                                await ProductService.updateProductStockByCart(toBeRestocked);
+                                                await OrderService.update(order.id, {status: 'accepted'})();
+                                                alert('successfully accepted order');
+                                                this.props.navigation.goBack(null);
+                                            }
+                                        } catch (err) {
+                                            alert(err.message);
+                                        }
                                     }
                                 },
                               {

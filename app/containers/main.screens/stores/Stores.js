@@ -11,7 +11,9 @@ import {
 import { SearchBar, Card} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import StoreService from '../../../services/store.service';
+import ProductService from '../../../services/products.service';
 import CartActions from '../../../reducers/cart/cart.action';
+import StripeService from '../../../services/stripe.service';
 
 class Container extends React.Component<> {
     state = {

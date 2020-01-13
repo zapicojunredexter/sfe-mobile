@@ -14,7 +14,8 @@ import { HeaderBackButton } from 'react-navigation';
 import ConfirmOrderModal from './modals/ConfirmOrderModal';
 import OrderService from '../../../services/orders.service';
 import CartActions from '../../../reducers/cart/cart.action';
-var stripe = require('stripe-client')('YOUR_PUBLISHABLE_STRIPE_API_KEY');
+import StripeService from '../../../services/stripe.service';
+var stripe = require('stripe-client')('pk_test_57vVyKl6BUz4EE9tlpEMpKRV00XiEhv9JS');
 
 class Container extends React.Component<> {
     static navigationOptions = ({ navigation }) => ({
@@ -48,7 +49,7 @@ class Container extends React.Component<> {
                 card: {
                 "number": '4242424242424242',
                 "exp_month": 12,
-                "exp_year": 2018,
+                "exp_year": 2022,
                 "cvc": '123'
                 }
             })
@@ -59,12 +60,26 @@ class Container extends React.Component<> {
             }
             stripeToken = stripeResponse.id;
         }
+
+        // calculating total
         const cartArray = Object.values(cartItems);
         const subtotal = cartArray.reduce((acc, cur) => {
             return acc + (cur.price * cur.orderQty);
         }, 0);
         const deliveryFee = store && store.deliveryFee || 0;
         const total = subtotal + deliveryFee;
+        // creating charge
+        const chargeResponse = await StripeService.createCharge({
+            token: stripeToken,
+            chargeable: Number(total) * 100
+        });
+
+        const charge = await chargeResponse.json();
+        if(chargeResponse.status !== 200) {
+            alert(`Payment error: ${charge.message}`);
+            return;
+        }
+        // creating order
         const cart = cartArray.map(crt => ({
             itemId: crt.id,
             orderQty: crt.orderQty,
@@ -91,7 +106,8 @@ class Container extends React.Component<> {
                 total,
                 deliveryFee
             },
-            stripeToken
+            stripeToken,
+            stripeCharge: charge.id,
         };
         this.props.submitOrder(payload)
             .then(() => {
