@@ -40,6 +40,7 @@ class InitialRoute extends React.Component<> {
             if(!hasPermission) {
                 await firebase.messaging().requestPermission();
             }
+            console.log('created', hasPermission);
             firebase.notifications().onNotification((notification) => {
                 console.log('notif',notification);
                 if(userId) {
