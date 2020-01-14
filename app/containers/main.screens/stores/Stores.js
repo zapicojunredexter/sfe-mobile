@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import firebase from 'react-native-firebase';
 import {
   Text,
   View,

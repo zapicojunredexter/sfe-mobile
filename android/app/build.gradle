@@ -159,6 +159,7 @@ dependencies {
     implementation "com.google.firebase:firebase-core:16.0.9"
     implementation "com.google.firebase:firebase-firestore:17.1.5"
     implementation "com.google.firebase:firebase-storage:17.0.0"
+    implementation "com.google.firebase:firebase-messaging:17.6.0"
 
     compile fileTree(dir: "libs", include: ["*.jar"])
     compile "com.android.support:appcompat-v7:23.0.1"
@@ -172,5 +173,13 @@ task copyDownloadableDepsToLibs(type: Copy) {
     from configurations.compile
     into 'libs'
 }
-
+/*
+configurations.all {
+    resolutionStrategy {
+        force "com.google.firebase:firebase-core:16.0.9"
+        force "com.google.firebase:firebase-firestore:17.1.5"
+        force "com.google.firebase:firebase-storage:17.0.0"
+        force "com.google.firebase:firebase-messaging:19.0.0"
+    }}
+    */
 apply plugin: 'com.google.gms.google-services'
