@@ -15,6 +15,7 @@ import { Card } from 'react-native-elements';
 import { HeaderBackButton } from 'react-navigation';
 import OrderService from '../../../services/orders.service';
 import ProductService from '../../../services/products.service';
+import UserService from '../../../services/user.service';
 
 
 class Container extends React.Component<> {
@@ -92,7 +93,7 @@ class Container extends React.Component<> {
                                     text: 'Yes',
                                     onPress: async () => {
                                         try {
-                                            const { cart } = order;
+                                            const { cart, customer } = order;
                                             const toBeRestocked = cart.map(crt => ({
                                                 id: crt.itemId,
                                                 qty: crt.orderQty,
@@ -103,6 +104,10 @@ class Container extends React.Component<> {
                                             if(res){
                                                 await ProductService.updateProductStockByCart(toBeRestocked);
                                                 await OrderService.update(order.id, {status: 'accepted'})();
+                                                UserService.sendNotifToUser(customer.id, {
+                                                    title: 'Your order has been accepted',
+                                                    message: 'Item is being prepared'
+                                                });
                                                 alert('successfully accepted order');
                                                 this.props.navigation.goBack(null);
                                             }
@@ -155,7 +160,12 @@ class Container extends React.Component<> {
                                 {
                                     text: 'Yes',
                                     onPress: () => {
+                                        const { customer } = order;
                                         OrderService.update(order.id, {status: 'delivery'})();
+                                        UserService.sendNotifToUser(customer.id, {
+                                            title: 'Your order is being delivered',
+                                            message: 'Item is on its way'
+                                        });
                                         this.props.navigation.goBack(null);
                                     }
                                 },

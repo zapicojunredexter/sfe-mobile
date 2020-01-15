@@ -15,6 +15,7 @@ import ConfirmOrderModal from './modals/ConfirmOrderModal';
 import OrderService from '../../../services/orders.service';
 import CartActions from '../../../reducers/cart/cart.action';
 import StripeService from '../../../services/stripe.service';
+import UserService from '../../../services/user.service';
 var stripe = require('stripe-client')('pk_test_57vVyKl6BUz4EE9tlpEMpKRV00XiEhv9JS');
 
 class Container extends React.Component<> {
@@ -111,13 +112,16 @@ class Container extends React.Component<> {
         };
         this.props.submitOrder(payload)
             .then(() => {
+                UserService.sendNotifToUser(store.id, {
+                    title: 'New Order',
+                    message: `You have a new order worth PHP ${total}`
+                });
                 alert('successfully added order');
                 this.props.clearCart();
                 this.props.navigation.pop(2);
             })
             .catch(err => alert(err.message));
     }
-
 
 
     render() {
