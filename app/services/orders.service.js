@@ -59,14 +59,14 @@ export default class {
     }
 
     static createCustomerListener = (customerId, callback = () => {}, query) => {
-        return collection.where('customer.id','==',customerId).onSnapshot((result) => {
+        return collection.orderBy("createdAtMs", "desc").where('customer.id','==',customerId).onSnapshot((result) => {
             const data = result.docs.map(data => ({id: data.id, ...data.data()}));
             callback(data);
         });
     }
     
     static createStoreListener = (storeId, callback = () => {}, query) => {
-        return collection.where('store.id','==',storeId).onSnapshot((result) => {
+        return collection.orderBy("createdAtMs", "desc").where('store.id','==',storeId).onSnapshot((result) => {
             const data = result.docs.map(data => ({id: data.id, ...data.data()}));
             callback(data);
         });
