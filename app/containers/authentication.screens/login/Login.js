@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import UserActions from '../../../reducers/user/user.action';
 import UserService from '../../../services/user.service';
+import NotificationService from '../../../services/notification.service';
 
 class Login extends React.Component<> {
     static navigationOptions = {
@@ -23,6 +24,8 @@ class Login extends React.Component<> {
         UserService.login(this.state.username, this.state.password)
             .then(res => {
                 this.props.setUser(res);
+                NotificationService.setNotifToken(res.id);
+                NotificationService.listenNotification();
                 if(res.type === 'store') {
                     this.props.navigation.navigate('Profile')
                 }

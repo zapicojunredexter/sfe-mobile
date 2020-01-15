@@ -6,71 +6,22 @@ import {
   View,
 } from 'react-native';
 import UserService from '../services/user.service';
+import NotificationService from "../services/notification.service";
 
 class InitialRoute extends React.Component<> {
     constructor(props){
         super(props);
         const { navigation, userType, userId } = props;
-        this.setNotification();
-        this.listenNotification();
+        if(userId){
+            NotificationService.setNotifToken(userId);
+            NotificationService.listenNotification();
+        }
         if(userType === 'store') {
             navigation.navigate('Profile');
         } else {
             navigation.navigate('Stores');
         }
 
-    }
-
-    setNotification = () => {
-        const { navigation, userType, userId } = this.props;
-        if(userId){
-            firebase.messaging().getToken().then(notifToken => {
-                UserService.update(userId, {notifToken})();
-            })
-            .catch(err => {});
-        }
-    }
-
-
-    listenNotification = async () => {
-        try {
-
-            const { navigation, userType, userId } = this.props;
-            const hasPermission = await firebase.messaging().hasPermission();
-            if(!hasPermission) {
-                await firebase.messaging().requestPermission();
-            }
-            console.log('created', hasPermission);
-            firebase.notifications().onNotification((notification) => {
-                console.log('notif',notification);
-                if(userId) {
-                    const notif = new firebase.notifications.Notification()
-                    .setNotificationId(notification._notificationId)
-                    .setTitle(notification._title)
-                    .setBody(notification._body)
-                    .setData(notification._data)
-                    .android.setSmallIcon('ic_notification')
-                    .android.setLargeIcon('ic_notification')
-                    .android.setChannelId('testchannel');
-                    if(notification.data.status_code === 'REVIEW_DRIVER' && notification.data.driver) {
-                        const driver = JSON.parse(notification.data.driver);
-                        this.setState({driver: driver });
-                    }
-                    firebase.notifications().displayNotification(notif);
-                }
-            });
-    
-        } catch (err) {
-            alert(err.message);
-        }
-        //   alert('AHAH');
-        // firebase.messaging().createLocalNotification({
-        //     body: 'body',
-        //     show_in_foreground: true,
-        //     title: 'title',
-        //     local_notification: true,
-        //     priority: 'high'
-        // }).catch(err => alert(err.message));
     }
 
     render() {
