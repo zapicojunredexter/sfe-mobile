@@ -76,6 +76,7 @@ class Registration extends React.Component<> {
               style={{color: 'white', marginBottom: 10 , width: '70%'}}
               placeholder="Password"
               value={this.state.password}
+              secureTextEntry
               onChangeText={ev => this.setState({password: ev})}
             />
             <TextInput

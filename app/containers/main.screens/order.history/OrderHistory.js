@@ -14,9 +14,11 @@ class Container extends React.Component<> {
     listener = null;
     state = {
         orders: [],
+        isFetching: false,
     };
     componentDidMount() {
         if(this.props.userType === 'customer') {  
+            this.fetchCustomerOrders();
             this.listener = OrderService.createCustomerListener(this.props.userId, (data) => {
                 this.setState({orders: data});
             });  
@@ -32,18 +34,37 @@ class Container extends React.Component<> {
             this.listener();
         }
     }
-    render() {
-        const sampleOrders = [
-            {name: 'order 1'},
-            {name: 'order 2'},
-            {name: 'order 3'},
-            {name: 'order 4'},
-        ]
 
+    fetchCustomerOrders = () => {
+        this.setState({isFetching: true});
+        OrderService.getCustomerOrders(this.props.userId).then((data) => {
+            this.setState({isFetching: false, orders: data});
+        })
+        .catch(err => {
+            alert(err.message)
+        })
+    }
+
+    fetchStoreOrders = () => {
+        this.setState({isFetching: true});
+        OrderService.getStoreOrders(this.props.userId).then((data) => {
+            this.setState({isFetching: false, orders: data});
+        })
+        .catch(err => {
+            alert(err.message)
+        })
+    }
+    render() {
+        const refreshFunctions = {
+            customer: this.state.fetchCustomerOrders,
+            store: this.state.fetchStoreOrders
+        };
         return (
             <View style={{flex: 1}}>
                 <FlatList
                     data={ this.state.orders }
+                    refreshing={this.state.refreshing}
+                    onRefresh={refreshFunctions[this.props.userType]}
                     renderItem={({item}) => {
                         //  ['cancelled','waiting', 'accepted','rejected','delivery', 'delivered']
                         const statusUC = item.status && item.status.toUpperCase() || 'wala';

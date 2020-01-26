@@ -70,15 +70,18 @@ class Container extends React.Component<> {
         const deliveryFee = store && store.deliveryFee || 0;
         const total = subtotal + deliveryFee;
         // creating charge
-        const chargeResponse = await StripeService.createCharge({
-            token: stripeToken,
-            chargeable: Number(total) * 100
-        });
+        let charge = null;
+        if(paymentType==='CC'){
+            const chargeResponse = await StripeService.createCharge({
+                token: stripeToken,
+                chargeable: Number(total) * 100
+            });
 
-        const charge = await chargeResponse.json();
-        if(chargeResponse.status !== 200) {
-            alert(`Payment error: ${charge.message}`);
-            return;
+            charge = await chargeResponse.json();
+            if(chargeResponse.status !== 200) {
+                alert(`Payment error: ${charge.message}`);
+                return;
+            }
         }
         // creating order
         const cart = cartArray.map(crt => ({
@@ -108,7 +111,7 @@ class Container extends React.Component<> {
                 deliveryFee
             },
             stripeToken,
-            stripeCharge: charge.id,
+            stripeCharge: charge && charge.id,
         };
         this.props.submitOrder(payload)
             .then(() => {

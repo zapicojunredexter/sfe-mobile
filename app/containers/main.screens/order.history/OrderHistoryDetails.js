@@ -68,8 +68,13 @@ class Container extends React.Component<> {
                                 {
                                     text: 'Yes',
                                     onPress: () => {
-                                        OrderService.update(order.id, {status: 'cancelled'})();
-                                        this.props.navigation.goBack(null);
+                                        OrderService.update(order.id, {status: 'cancelled'})()
+                                        .then(() => {
+                                            this.props.navigation.goBack(null);
+                                        })
+                                        .catch(err => {
+                                            alert(err.message);
+                                        });
                                     }
                                 },
                               {
@@ -136,8 +141,13 @@ class Container extends React.Component<> {
                                 {
                                     text: 'Yes',
                                     onPress: () => {
-                                        OrderService.update(order.id, {status: 'rejected'})();
-                                        this.props.navigation.goBack(null);
+                                        OrderService.update(order.id, {status: 'rejected'})()
+                                        .then(() => {
+                                            this.props.navigation.goBack(null);
+                                        })
+                                        .catch(err => {
+                                            alert(err.message);
+                                        });;
                                     }
                                 },
                               {
@@ -161,12 +171,17 @@ class Container extends React.Component<> {
                                     text: 'Yes',
                                     onPress: () => {
                                         const { customer } = order;
-                                        OrderService.update(order.id, {status: 'delivery'})();
-                                        UserService.sendNotifToUser(customer.id, {
-                                            title: 'Your order is being delivered',
-                                            message: 'Item is on its way'
-                                        });
-                                        this.props.navigation.goBack(null);
+                                        OrderService.update(order.id, {status: 'delivery'})()
+                                            .then(() => {
+                                                UserService.sendNotifToUser(customer.id, {
+                                                    title: 'Your order is being delivered',
+                                                    message: 'Item is on its way'
+                                                });
+                                                this.props.navigation.goBack(null);
+                                            })
+                                            .catch(err => {
+                                                alert(err.message);
+                                            });
                                     }
                                 },
                               {
