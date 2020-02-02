@@ -41,7 +41,9 @@ class DrawerComponent extends React.PureComponent<> {
                         }}>
                         <Image
                             style={{width: 70, height: 70}}
-                            source={require('../assets/images/sfelogo.png')}
+                            source={this.props.userDp ? {
+                                uri: this.props.userDp
+                            } : require('../assets/images/sfelogo.png')}
                         />
                         {/* <Text style={{fontSize: 30}}>C</Text> */}
                     </View>
@@ -93,6 +95,7 @@ const mapStateToProps = store => ({
     userId: store.userStore.user && store.userStore.user.id,
     userType: store.userStore.user && store.userStore.user.type,
     userName: store.userStore.user && store.userStore.user.name,
+    userDp: store.userStore.user && store.userStore.user.dpUrl,
 });
 const mapDispatchToProps = dispatch => ({
     logout: () => dispatch(UserAction.setUser(null)),

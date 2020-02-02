@@ -6,7 +6,9 @@ import {
   View,
 } from 'react-native';
 import UserService from '../services/user.service';
+import CustomerService from '../services/customers.service';
 import NotificationService from "../services/notification.service";
+import UserActions from '../reducers/user/user.action';
 
 class InitialRoute extends React.Component<> {
     constructor(props){
@@ -15,6 +17,7 @@ class InitialRoute extends React.Component<> {
         if(userId){
             NotificationService.setNotifToken(userId);
             NotificationService.listenNotification();
+            // this.listenUserUpdates();
         }
         if(userType === 'store') {
             navigation.navigate('Profile');
@@ -24,10 +27,39 @@ class InitialRoute extends React.Component<> {
 
     }
 
+    userListener = null;
+
+    customerListener = null;
+
+    storeListener = null;
+
+    listenUserUpdates = () => {
+        if(this.props.userType === 'store') {
+            this.storeListener = null;
+        } else {
+            this.customerListener = CustomerService.createCustomerListener(this.props.userId, (user) => {
+                console.log('called', user);
+                // this.props.setUser({...this.props.user,...user});
+            })
+        }
+    }
+
+    componentWillUnmount() {
+        if(this.userListener) {
+            this.userListener();
+        }
+        if(this.customerListener) {
+            this.customerListener();
+        }
+        if(this.storeListener) {
+            this.storeListener();
+        }
+    }
+
     render() {
         return (
             <View>
-                <Text>INITIAL ROUTE</Text>
+                
             </View>
         );
     }
@@ -37,6 +69,7 @@ const mapStateToProps = store => ({
     userId: store.userStore.user && store.userStore.user.id,
 });
 const mapDispatchToProps = dispatch => ({
+    setUser: (user) => dispatch(UserActions.setUser(user))
 });
 
 export default connect(
