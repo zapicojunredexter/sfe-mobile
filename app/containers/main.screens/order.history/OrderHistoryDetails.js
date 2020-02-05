@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import firebase from 'react-native-firebase';
 import {
   Text,
   View,
@@ -16,12 +17,17 @@ import { HeaderBackButton } from 'react-navigation';
 import OrderService from '../../../services/orders.service';
 import ProductService from '../../../services/products.service';
 import UserService from '../../../services/user.service';
+import StartOrderModal from './modals/StartOrderModal';
 
 
 class Container extends React.Component<> {
     static navigationOptions = ({ navigation }) => ({
         headerLeft: <HeaderBackButton onPress={() => navigation.goBack(null)} />,
     })
+
+    state = {
+        isStartDeliverModalOpen: false,
+    }
 
     renderButtons = () => {
         const order = this.props.navigation.state && this.props.navigation.state.params;
@@ -68,7 +74,10 @@ class Container extends React.Component<> {
                                 {
                                     text: 'Yes',
                                     onPress: () => {
-                                        OrderService.update(order.id, {status: 'cancelled'})()
+                                        OrderService.update(order.id, {
+                                            status: 'cancelled',
+                                            cancelledDate: firebase.firestore.FieldValue.serverTimestamp(),
+                                        })()
                                         .then(() => {
                                             this.props.navigation.goBack(null);
                                         })
@@ -108,10 +117,13 @@ class Container extends React.Component<> {
                                             const res = await ProductService.updateProductStockByCart(toBeRestocked)
                                             if(res){
                                                 await ProductService.updateProductStockByCart(toBeRestocked);
-                                                await OrderService.update(order.id, {status: 'accepted'})();
+                                                await OrderService.update(order.id, {
+                                                    status: 'accepted',
+                                                    acceptedDate: firebase.firestore.FieldValue.serverTimestamp(),
+                                                })();
                                                 UserService.sendNotifToUser(customer.id, {
                                                     title: 'Your order has been accepted',
-                                                    message: 'Item is being prepared'
+                                                    message: 'Item is being prepared',
                                                 });
                                                 alert('successfully accepted order');
                                                 this.props.navigation.goBack(null);
@@ -141,7 +153,10 @@ class Container extends React.Component<> {
                                 {
                                     text: 'Yes',
                                     onPress: () => {
-                                        OrderService.update(order.id, {status: 'rejected'})()
+                                        OrderService.update(order.id, {
+                                            status: 'rejected',
+                                            rejectedDate: firebase.firestore.FieldValue.serverTimestamp(),
+                                        })()
                                         .then(() => {
                                             this.props.navigation.goBack(null);
                                         })
@@ -162,37 +177,7 @@ class Container extends React.Component<> {
                 />}
                 {canStartDelivery && <Button
                     title="Start Delivery"
-                    onPress={() => {
-                        Alert.alert(
-                            'Start Delivery',
-                            'Are you sure you want to Start delivery?',
-                            [
-                                {
-                                    text: 'Yes',
-                                    onPress: () => {
-                                        const { customer } = order;
-                                        OrderService.update(order.id, {status: 'delivery'})()
-                                            .then(() => {
-                                                UserService.sendNotifToUser(customer.id, {
-                                                    title: 'Your order is being delivered',
-                                                    message: 'Item is on its way'
-                                                });
-                                                this.props.navigation.goBack(null);
-                                            })
-                                            .catch(err => {
-                                                alert(err.message);
-                                            });
-                                    }
-                                },
-                              {
-                                text: 'No',
-                                onPress: () => console.log('Cancel Pressed'),
-                                style: 'cancel',
-                              },
-                            ],
-                            {cancelable: true},
-                        );
-                    }}
+                    onPress={() => this.setState({isStartDeliverModalOpen: true})}
                 />}
                 {canFinish && <Button
                     title="Finish"
@@ -204,7 +189,10 @@ class Container extends React.Component<> {
                                 {
                                     text: 'Yes',
                                     onPress: () => {
-                                        OrderService.update(order.id, {status: 'delivered'})();
+                                        OrderService.update(order.id, {
+                                            status: 'delivered',
+                                            deliveredDate: firebase.firestore.FieldValue.serverTimestamp(),
+                                        })();
                                         this.props.navigation.goBack(null);
                                     }
                                 },
@@ -238,6 +226,48 @@ class Container extends React.Component<> {
         };
         return (
             <View style={{flex: 1}}>
+                <StartOrderModal
+                    visible={this.state.isStartDeliverModalOpen}
+                    close={() => this.setState({isStartDeliverModalOpen: false})}
+                    submit={(newFields) => {
+
+                        Alert.alert(
+                            'Start Delivery',
+                            'Are you sure you want to Start delivery?',
+                            [
+                                {
+                                    text: 'Yes',
+                                    onPress: () => {
+                                        const { customer } = order;
+                                        OrderService.update(order.id, {
+                                                status: 'delivery',
+
+                                                deliveryDate: firebase.firestore.FieldValue.serverTimestamp(),
+                                                ...newFields,
+                                            })()
+                                            .then(() => {
+                                                UserService.sendNotifToUser(customer.id, {
+                                                    title: 'Your order is being delivered',
+                                                    message: 'Item is on its way'
+                                                });
+                                                this.setState({isStartDeliverModalOpen: false})
+                                                this.props.navigation.goBack(null);
+                                            })
+                                            .catch(err => {
+                                                alert(err.message);
+                                            });
+                                    }
+                                },
+                              {
+                                text: 'No',
+                                onPress: () => console.log('Cancel Pressed'),
+                                style: 'cancel',
+                              },
+                            ],
+                            {cancelable: true},
+                        );
+                    }}
+                />
                 <ScrollView>
                     <Card title={statusUC} titleStyle = {{backgroundColor: cardBgColor[statusUC], color: 'white', padding: 10}}>
                         <View style={{flexDirection: 'row',justifyContent: 'space-between', marginBottom: 15}}>
@@ -264,6 +294,12 @@ class Container extends React.Component<> {
                             <Text style={{fontSize: 16}}>SubTotal:</Text>
                             <Text style={{fontSize: 16}}>&#8369; {order.payment && order.payment.subtotal}</Text>
                         </View>
+                        {(order.status === 'accepted' || order.status === 'delivery' || order.status === 'delivered') && (
+                            <View style={{flexDirection: 'row',justifyContent: 'space-between', marginBottom: 15}}>
+                                <Text style={{fontSize: 16}}>Driver's Name:</Text>
+                                <Text style={{fontSize: 16}}>{order && order.driverName}</Text>
+                            </View>
+                        )}
                         <View style={{flexDirection: 'row',justifyContent: 'space-between', marginBottom: 15}}>
                             <Text style={{fontSize: 16}}>Delivery Fee:</Text>
                             <Text style={{fontSize: 16}}>&#8369; {order.payment && order.payment.deliveryFee}</Text>

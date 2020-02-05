@@ -61,4 +61,8 @@ export default class {
             callback(data);
         });
     }
+
+    static createCustomerListener = (userId, callback = () => {}) => {
+        return collection.doc(userId).onSnapshot(res => callback({id: res.id,...res.data()}));
+    }
 };

@@ -98,6 +98,7 @@ class Container extends React.Component<> {
             customer: {
                 id: this.props.userId,
                 name: this.props.name,
+                dpUrl: this.props.userDpUrl,
             },
             cart,
             status: 'waiting',
@@ -331,6 +332,7 @@ class Container extends React.Component<> {
 }
 const mapStateToProps = store => ({
     userId: store.userStore.user && store.userStore.user.id,
+    userDpUrl: store.userStore && store.userStore.user && store.userStore.user.dpUrl,
     name: store.userStore.user && store.userStore.user.name,
     address: store.userStore.user && store.userStore.user.address,
     contactNumber: store.userStore.user && store.userStore.user.contactNumber,

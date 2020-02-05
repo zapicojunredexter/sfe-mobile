@@ -5,12 +5,17 @@ import {
   View,
   Button,
   ScrollView,
-  TextInput
+  TextInput,
+  TouchableOpacity,
+  Image,
 } from 'react-native';
 import { Card } from 'react-native-elements';
+import ImagePicker from 'react-native-image-picker';
 import UserService from '../../../services/user.service';
 import StoreService from '../../../services/store.service';
+import StorageService from '../../../services/storage.service';
 import CustomerService from '../../../services/customers.service';
+import UserActions from '../../../reducers/user/user.action';
 
 class Container extends React.Component<> {
     static navigationOptions = {
@@ -27,6 +32,7 @@ class Container extends React.Component<> {
             name: user && user.name || '',
             contactNumber: user && user.contactNumber || '',
             address: user && user.address || '',
+            dpUrl: user && user.dpUrl || '',
         }
     }
 
@@ -69,7 +75,43 @@ class Container extends React.Component<> {
                             style={{color: 'tomato',marginBottom: 10}}
                         />
                         */}
-                        
+                        {this.props.user && this.props.user.type && this.props.user.type === 'customer' && (
+                            <TouchableOpacity
+                                style={{alignItems:'center'}}
+                                onPress={() => {
+                                    ImagePicker.showImagePicker(null, response => {
+                                        console.log('Response = ', response);
+                                    
+                                        if (response.didCancel) {
+                                            console.log('User cancelled image picker');
+                                        } else if (response.error) {
+                                            console.log('ImagePicker Error: ', response.error);
+                                        } else if (response.customButton) {
+                                            console.log('User tapped custom button: ', response.customButton);
+                                        } else {
+                                            let source = response;
+                                            const { uri } = response;
+                                            // You can also display the image using data:
+                                            // let source = { uri: 'data:image/jpeg;base64,' + response.data };
+                                            StorageService.uploadFile([uri])()
+                                                .then((res) => {
+                                                    this.setState({
+                                                        dpUrl: res[0],
+                                                    });
+                                                })
+                                                .catch(err => alert(err.message));
+                                        }
+                                    });
+                                }}
+                            >
+                                <Image
+                                    source={this.state.dpUrl ? {
+                                        uri: this.state.dpUrl
+                                    } : require('../../../assets/images/no-image.png')}
+                                    style={{height: 150, width:150}}
+                                />
+                            </TouchableOpacity>
+                        )}
                         <TextInput
                             placeholder="name"
                             value={this.state.name}
@@ -107,12 +149,18 @@ class Container extends React.Component<> {
                                     address: this.state.address,
                                 };
                                 if(userType === 'customer') {
-                                    await CustomerService.update(userId, details)();
+                                    const customerDetails = {
+                                        ...details,
+                                        dpUrl: this.state.dpUrl,
+                                    };
+                                    await CustomerService.update(userId, customerDetails)();
+                                    this.props.setUser({...this.props.user, ...customerDetails});
                                 }
                                 if(userType === 'store') {
                                     await StoreService.update(userId, details)();
+                                    this.props.setUser({...this.props.user, ...details});
                                 }
-                                alert('successfully updated user')
+                                alert('successfully updated user');
                                 this.setState({isEdited: false});
                             } catch (err) {
                                 alert(err.message)
@@ -185,6 +233,7 @@ const mapStateToProps = store => ({
     user: store.userStore.user
 });
 const mapDispatchToProps = dispatch => ({
+    setUser: (user) => dispatch(UserActions.setUser(user)),
 });
 
 export default connect(
