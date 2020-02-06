@@ -183,7 +183,8 @@ class Container extends React.Component<> {
                                         <View>
                                                 <Text style={{marginBottom: 2, fontSize: 16, fontWeight: 'bold'}}>{item.name}</Text>
                                                 <Text style={{marginBottom: 2, fontSize: 12}}>{item.description}</Text>
-                                                <Text style={{marginBottom: 2, fontSize: 14, color: 'tomato'}}>&#8369; {item.price}</Text>
+                                                <Text style={{marginBottom: 8, fontSize: 14, color: 'tomato'}}>&#8369; {item.price}</Text>
+                                                <Text style={{marginBottom: 2, fontSize: 12, fontWeight: 'bold'}}>Serving size: {item.serving}</Text>
                                         </View>
                                     </View>
                                 </Card>    
