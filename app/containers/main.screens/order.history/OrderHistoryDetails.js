@@ -20,6 +20,7 @@ import UserService from '../../../services/user.service';
 import StartOrderModal from './modals/StartOrderModal';
 import StripeService from '../../../services/stripe.service';
 
+import Spinner from 'react-native-loading-spinner-overlay';
 
 class Container extends React.Component<> {
     static navigationOptions = ({ navigation }) => ({
@@ -28,6 +29,7 @@ class Container extends React.Component<> {
 
     state = {
         isStartDeliverModalOpen: false,
+        isLoading: false
     }
 
     renderButtons = () => {
@@ -76,6 +78,7 @@ class Container extends React.Component<> {
                                     text: 'Yes',
                                     onPress: async () => {
                                         try {
+                                            this.setState({isLoading: true});
                                             const stripeCharge = order.stripeCharge;
                                             if(stripeCharge){
                                                 await StripeService.cancelCharge({chargeId: stripeCharge});
@@ -85,12 +88,15 @@ class Container extends React.Component<> {
                                                 cancelledDate: firebase.firestore.FieldValue.serverTimestamp(),
                                             })()
                                             .then(() => {
+                                                this.setState({isLoading: false})
                                                 this.props.navigation.goBack(null);
                                             })
                                             .catch(err => {
+                                                this.setState({isLoading: false})
                                                 alert(err.message);
                                             });
                                         } catch (err) {
+                                            this.setState({isLoading: false})
                                             alert(err.message);
                                         }
                                     }
@@ -116,6 +122,7 @@ class Container extends React.Component<> {
                                     text: 'Yes',
                                     onPress: async () => {
                                         try {
+                                            this.setState({isLoading: true});
                                             const { cart, customer } = order;
                                             const toBeRestocked = cart.map(crt => ({
                                                 id: crt.itemId,
@@ -130,6 +137,7 @@ class Container extends React.Component<> {
                                                     status: 'accepted',
                                                     acceptedDate: firebase.firestore.FieldValue.serverTimestamp(),
                                                 })();
+                                                this.setState({isLoading: false})
                                                 UserService.sendNotifToUser(customer.id, {
                                                     title: 'Your order has been accepted',
                                                     message: 'Item is being prepared',
@@ -137,7 +145,10 @@ class Container extends React.Component<> {
                                                 alert('successfully accepted order');
                                                 this.props.navigation.goBack(null);
                                             }
+                                            
+                                            this.setState({isLoading: false})
                                         } catch (err) {
+                                            this.setState({isLoading: false})
                                             alert(err.message);
                                         }
                                     }
@@ -162,14 +173,17 @@ class Container extends React.Component<> {
                                 {
                                     text: 'Yes',
                                     onPress: () => {
+                                        this.setState({isLoading: true})
                                         OrderService.update(order.id, {
                                             status: 'rejected',
                                             rejectedDate: firebase.firestore.FieldValue.serverTimestamp(),
                                         })()
                                         .then(() => {
+                                            this.setState({isLoading: false})
                                             this.props.navigation.goBack(null);
                                         })
                                         .catch(err => {
+                                            this.setState({isLoading: false})
                                             alert(err.message);
                                         });;
                                     }
@@ -197,11 +211,13 @@ class Container extends React.Component<> {
                             [
                                 {
                                     text: 'Yes',
-                                    onPress: () => {
+                                    onPress: async () => {
+                                        this.setState({isLoading: true})
                                         OrderService.update(order.id, {
                                             status: 'delivered',
                                             deliveredDate: firebase.firestore.FieldValue.serverTimestamp(),
                                         })();
+                                        this.setState({isLoading: false});
                                         this.props.navigation.goBack(null);
                                     }
                                 },
@@ -235,6 +251,10 @@ class Container extends React.Component<> {
         };
         return (
             <View style={{flex: 1}}>
+                <Spinner
+                visible={this.state.isLoading}
+                textContent={'Loading...'}
+                />
                 <StartOrderModal
                     visible={this.state.isStartDeliverModalOpen}
                     close={() => this.setState({isStartDeliverModalOpen: false})}
@@ -247,6 +267,7 @@ class Container extends React.Component<> {
                                 {
                                     text: 'Yes',
                                     onPress: () => {
+                                        this.setState({isLoading: true});
                                         const { customer } = order;
                                         OrderService.update(order.id, {
                                                 status: 'delivery',
@@ -259,10 +280,11 @@ class Container extends React.Component<> {
                                                     title: 'Your order is being delivered',
                                                     message: 'Item is on its way'
                                                 });
-                                                this.setState({isStartDeliverModalOpen: false})
+                                                this.setState({isStartDeliverModalOpen: false, isLoading: false,})
                                                 this.props.navigation.goBack(null);
                                             })
                                             .catch(err => {
+                                                this.setState({isLoading: false})
                                                 alert(err.message);
                                             });
                                     }

@@ -9,7 +9,7 @@ import {
   ScrollView
 } from 'react-native';
 import UserService from '../../../services/user.service';
-
+import Spinner from 'react-native-loading-spinner-overlay';
 
 class Registration extends React.Component<> {
     listener = null;
@@ -20,7 +20,7 @@ class Registration extends React.Component<> {
         name: '',
         contactNumber: '',
         address: '',
-
+        isLoading: false,
     };
     componentDidMount(){
         console.log('mounted');
@@ -36,6 +36,7 @@ class Registration extends React.Component<> {
     };
 
     submitRegistration = () => {
+        this.setState({isLoading: true})
         const user = {
             username: this.state.username,
             password: this.state.password,
@@ -48,13 +49,21 @@ class Registration extends React.Component<> {
         };
         UserService.registerCustomer(user, customer)
             .then(() => {
+                this.setState({isLoading: false})
                 alert('successfully registerd');
             })
-            .catch(err => alert(err.message));
+            .catch(err => {
+                this.setState({isLoading: false});
+                alert(err.message);
+            });
     }
   render() {
     return (
       <View style={{flex: 1, backgroundColor: 'tomato'}}>
+            <Spinner
+                visible={this.state.isLoading}
+                textContent={'Loading...'}
+            />
         <ScrollView>
           <View style={{ justifyContent: 'center', alignItems: 'center', top: '2%', marginBottom: 10}}
           >

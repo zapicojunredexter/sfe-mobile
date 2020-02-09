@@ -16,6 +16,7 @@ import OrderService from '../../../services/orders.service';
 import CartActions from '../../../reducers/cart/cart.action';
 import StripeService from '../../../services/stripe.service';
 import UserService from '../../../services/user.service';
+import Spinner from 'react-native-loading-spinner-overlay';
 var stripe = require('stripe-client')('pk_test_57vVyKl6BUz4EE9tlpEMpKRV00XiEhv9JS');
 
 class Container extends React.Component<> {
@@ -27,6 +28,7 @@ class Container extends React.Component<> {
         super(props);
         const { address } = props;
         this.state = {
+            isLoading: false,
             store: null,
             isConfirmed: false,
             deliveryAddress: address,
@@ -42,6 +44,8 @@ class Container extends React.Component<> {
         }
     }
     submitOrder = async () => {
+        try {
+        this.setState({isLoading: true});
         const {cartItems, contactNumber} = this.props;
         let stripeToken = undefined;
         const { store, paymentType, noteText, deliveryAddress } = this.state;
@@ -56,7 +60,9 @@ class Container extends React.Component<> {
             })
             .then(res => res).catch(err => err);
             if(stripeResponse.error){
+                this.setState({isLoading: false});
                 alert(stripeResponse.error.message);
+                
                 return;
             }
             stripeToken = stripeResponse.id;
@@ -79,6 +85,7 @@ class Container extends React.Component<> {
 
             charge = await chargeResponse.json();
             if(chargeResponse.status !== 200) {
+                this.setState({isLoading: false});
                 alert(`Payment error: ${charge.message}`);
                 return;
             }
@@ -116,6 +123,7 @@ class Container extends React.Component<> {
         };
         this.props.submitOrder(payload)
             .then(() => {
+                this.setState({isLoading: false});
                 UserService.sendNotifToUser(store.id, {
                     title: 'New Order',
                     message: `You have a new order worth PHP ${total}`
@@ -124,7 +132,15 @@ class Container extends React.Component<> {
                 this.props.clearCart();
                 this.props.navigation.pop(2);
             })
-            .catch(err => alert(err.message));
+            .catch(err => {
+                
+                this.setState({isLoading: false});
+                alert(err.message);
+            });
+        } catch (err) {
+            this.setState({isLoading: false});
+            alert(err.message);
+        }
     }
 
 
@@ -144,6 +160,10 @@ class Container extends React.Component<> {
 
         return (
             <View style={{flex: 1}}>
+                <Spinner
+                    visible={this.state.isLoading}
+                    textContent={'Loading...'}
+                />
                 {isConfirmed ? (
                 <ScrollView>
                     <Card>

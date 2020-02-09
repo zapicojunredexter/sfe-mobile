@@ -11,6 +11,8 @@ import UserActions from '../../../reducers/user/user.action';
 import UserService from '../../../services/user.service';
 import NotificationService from '../../../services/notification.service';
 
+import Spinner from 'react-native-loading-spinner-overlay';
+
 class Login extends React.Component<> {
     static navigationOptions = {
         header: null,
@@ -18,11 +20,14 @@ class Login extends React.Component<> {
     state = {
         username: '',
         password: '',
+        isLoading: false
     };
 
     login = () => {
+        this.setState({isLoading: true})
         UserService.login(this.state.username, this.state.password)
             .then(res => {
+                this.setState({isLoading: false})
                 this.props.setUser(res);
                 NotificationService.setNotifToken(res.id);
                 NotificationService.listenNotification();
@@ -34,6 +39,7 @@ class Login extends React.Component<> {
                 }
             })
             .catch(err => {
+                this.setState({isLoading: false})
                 alert(err.message);
             });
     }
@@ -41,6 +47,10 @@ class Login extends React.Component<> {
   render() {
     return (
       <View style={{flex: 1, backgroundColor: 'tomato'}}>
+        <Spinner
+            visible={this.state.isLoading}
+            textContent={'Loading...'}
+        />
         <View style={{ justifyContent: 'center', alignItems: 'center', top: '15%'}}
         >
           <Image
