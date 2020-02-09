@@ -18,6 +18,7 @@ import OrderService from '../../../services/orders.service';
 import ProductService from '../../../services/products.service';
 import UserService from '../../../services/user.service';
 import StartOrderModal from './modals/StartOrderModal';
+import StripeService from '../../../services/stripe.service';
 
 
 class Container extends React.Component<> {
@@ -73,17 +74,25 @@ class Container extends React.Component<> {
                             [
                                 {
                                     text: 'Yes',
-                                    onPress: () => {
-                                        OrderService.update(order.id, {
-                                            status: 'cancelled',
-                                            cancelledDate: firebase.firestore.FieldValue.serverTimestamp(),
-                                        })()
-                                        .then(() => {
-                                            this.props.navigation.goBack(null);
-                                        })
-                                        .catch(err => {
+                                    onPress: async () => {
+                                        try {
+                                            const stripeCharge = order.stripeCharge;
+                                            if(stripeCharge){
+                                                await StripeService.cancelCharge({chargeId: stripeCharge});
+                                            }
+                                            OrderService.update(order.id, {
+                                                status: 'cancelled',
+                                                cancelledDate: firebase.firestore.FieldValue.serverTimestamp(),
+                                            })()
+                                            .then(() => {
+                                                this.props.navigation.goBack(null);
+                                            })
+                                            .catch(err => {
+                                                alert(err.message);
+                                            });
+                                        } catch (err) {
                                             alert(err.message);
-                                        });
+                                        }
                                     }
                                 },
                               {

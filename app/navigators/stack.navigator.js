@@ -16,6 +16,7 @@ import StoreDetails from '../containers/main.screens/stores/StoreDetails';
 import ConfirmOrder  from '../containers/main.screens/stores/ConfirmOrder';
 import Login from '../containers/authentication.screens/login/Login';
 import Registration from '../containers/authentication.screens/registration/Registration';
+import Terms from '../containers/main.screens/termsandconditions/Termsandconditions';
 import Drawer from './Drawer';
 const AuthenticationStack = createStackNavigator({
     Login : {
@@ -94,6 +95,15 @@ const MainStack = createDrawerNavigator({
         screen: createStackWithNotifIcon({OrderHistory, OrderHistoryDetails, AddFeedback}),
         navigationOptions: {
             drawerLabel: 'OrderHistory',
+            // drawerIcon: () => (
+            //     <Entypo name="home" size={20} color="#fff" />
+            // ),
+        },
+    },
+    Terms: {
+        screen: createStackWithNotifIcon({Terms}),
+        navigationOptions: {
+            drawerLabel: 'Terms',
             // drawerIcon: () => (
             //     <Entypo name="home" size={20} color="#fff" />
             // ),

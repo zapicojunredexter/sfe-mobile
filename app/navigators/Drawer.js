@@ -68,7 +68,9 @@ class DrawerComponent extends React.PureComponent<> {
                         }}/>
                     <TouchableOpacity
                         style={{padding: 10,paddingLeft: 15}}
-                        onPress={() => alert("'TODO: terms and conditions'")}
+                        onPress={() => {
+                            this.props.navigation.navigate('Terms');
+                        }}
                     >
                         <Text style={{color: 'white'}}>Terms & Conditions</Text>
                     </TouchableOpacity>

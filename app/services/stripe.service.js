@@ -11,4 +11,14 @@ export default class StripeService {
             },
         })
     }
+
+    static cancelCharge = (body) => {
+        return fetch(`${api_url}/stripe`, {
+            method: 'DELETE',
+            body: JSON.stringify(body),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+    }
 }
