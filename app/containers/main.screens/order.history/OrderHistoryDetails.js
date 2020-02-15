@@ -331,6 +331,21 @@ class Container extends React.Component<> {
                                 <Text style={{fontSize: 16}}>{order && order.driverName}</Text>
                             </View>
                         )}
+                        
+                        <View style={{flexDirection: 'row',justifyContent: 'space-between', marginBottom: 15}}>
+                            <Text style={{fontSize: 16}}>Customer's Name:</Text>
+                            <Text style={{fontSize: 16}}>{order && order.customer && order.customer.name}</Text>
+                        </View>
+
+                        <View style={{flexDirection: 'row',justifyContent: 'space-between', marginBottom: 15}}>
+                            <Text style={{fontSize: 16}}>Note:</Text>
+                            <Text style={{fontSize: 16}}>{order && order.note}</Text>
+                        </View>
+                        
+                        <View style={{flexDirection: 'row',justifyContent: 'space-between', marginBottom: 15}}>
+                            <Text style={{fontSize: 16}}>Delivery Address:</Text>
+                            <Text style={{fontSize: 16}}>{order && order.deliveryAddress}</Text>
+                        </View>
                         <View style={{flexDirection: 'row',justifyContent: 'space-between', marginBottom: 15}}>
                             <Text style={{fontSize: 16}}>Delivery Fee:</Text>
                             <Text style={{fontSize: 16}}>&#8369; {order.payment && order.payment.deliveryFee}</Text>
