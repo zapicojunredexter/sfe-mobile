@@ -15,6 +15,7 @@ const screens = {
         'Profile' : true,
         'OrderHistory' : true,
         'Stores' : true,
+        'MasterProducts' : true,
     },
     'none' : {
         'Stores' : true,
