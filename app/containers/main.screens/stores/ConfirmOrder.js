@@ -73,7 +73,7 @@ class Container extends React.Component<> {
         const subtotal = cartArray.reduce((acc, cur) => {
             return acc + (cur.price * cur.orderQty);
         }, 0);
-        const deliveryFee = store && store.deliveryFee || 0;
+        const deliveryFee = subtotal >= 1000 ? 0 : (store && store.deliveryFee || 0);
         const total = subtotal + deliveryFee;
         // creating charge
         let charge = null;
@@ -200,24 +200,24 @@ class Container extends React.Component<> {
                                 <View>
                                     <TextInput
                                         placeholder={"Card Number"}
-                                        onChangeText={(noteText) => this.setState({noteText})}
+                                        // onChangeText={(noteText) => this.setState({noteText})}
                                         // value={this.state.noteText}
                                         style = {{marginBottom: 10}}/>
                                 </View>
                                 <View style={{flexDirection:'row'}}>
                                     <TextInput
                                         placeholder={"CVC"}
-                                        onChangeText={(noteText) => this.setState({noteText})}
+                                        // onChangeText={(noteText) => this.setState({noteText})}
                                         // value={this.state.noteText}
                                         style = {{width: '50%', marginRight: '3%'}}/>
                                     <TextInput
                                         placeholder={"00"}
-                                        onChangeText={(noteText) => this.setState({noteText})}
+                                        // onChangeText={(noteText) => this.setState({noteText})}
                                         // value={this.state.noteText}
                                         style = {{width: '22%', marginRight: '3%'}}/>
                                     <TextInput
                                         placeholder={"00"}
-                                        onChangeText={(noteText) => this.setState({noteText})}
+                                        // onChangeText={(noteText) => this.setState({noteText})}
                                         // value={this.state.noteText}
                                         style = {{width: '22%'}}/>
                                 </View>

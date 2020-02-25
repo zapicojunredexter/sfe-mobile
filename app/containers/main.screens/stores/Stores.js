@@ -15,17 +15,39 @@ import StoreService from '../../../services/store.service';
 import ProductService from '../../../services/products.service';
 import CartActions from '../../../reducers/cart/cart.action';
 import StripeService from '../../../services/stripe.service';
+import { computeDistance } from '../../../utils/computations';
+import { getLocationPermission, getCurrentLocation } from '../../../utils/permissions';
 
 class Container extends React.Component<> {
     state = {
         stores: [],
         search: ''
     };
+    
 
     componentDidMount() {
         this.props.fetchStores()
             .then(stores => {
-                this.setState({stores});
+                getCurrentLocation().then(currentLocation => {
+                    const withDistance = stores.map(store => {
+                        const distance = computeDistance(
+                            currentLocation.latitude,
+                            currentLocation.longitude,
+                            store.location && store.location.latitude,
+                            store.location && store.location.longitude,
+                        )
+                        return {
+                            ...store,
+                            distance: store.location ? distance : -1
+                        };
+                    });
+
+                    const toShow = withDistance.filter(dist => dist.distance > -1);
+                    toShow.sort((a, b) => a.distance - b.distance);
+
+                    this.setState({stores: toShow});
+                })
+                .catch(err => alert(err.message));
             })
             .catch(err => alert(err.message));
     }
@@ -101,7 +123,11 @@ class Container extends React.Component<> {
                                     <Text>{item.score ? ((item.score && item.score.total || 0) / (item.score && item.score.count || 0)).toFixed(1) : 0} ({item.score && item.score.count || 0})</Text>
                                 </Text>
                             </View>
-                            <Text style={{fontSize: 14, color: 'tomato', marginBottom: 15}}>&#8369; {item.deliveryFee || 0} Delivery Fee</Text>
+                            <Text style={{fontSize: 14, color: 'tomato', marginBottom: 4}}>&#8369; {item.deliveryFee || 0} Delivery Fee</Text>
+                            <Text style={{fontSize: 14, marginBottom: 15}}>
+                            <Icon name={'street-view'}  color="tomato" size={15}></Icon>
+                            {`${(Number(item.distance).toFixed(4))}km `} from your location    
+                            </Text>
                         </Card>
                        </TouchableOpacity>
                      )}

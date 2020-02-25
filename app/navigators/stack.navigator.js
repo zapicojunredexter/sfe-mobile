@@ -14,6 +14,7 @@ import Feedbacks from '../containers/main.screens/feedbacks/Feedbacks';
 import AddFeedback from '../containers/main.screens/feedbacks/AddFeedback';
 import StoreDetails from '../containers/main.screens/stores/StoreDetails';
 import ConfirmOrder  from '../containers/main.screens/stores/ConfirmOrder';
+import MasterProducts from '../containers/main.screens/products/MasterProducts';
 import Login from '../containers/authentication.screens/login/Login';
 import Registration from '../containers/authentication.screens/registration/Registration';
 import Terms from '../containers/main.screens/termsandconditions/Termsandconditions';
@@ -84,6 +85,15 @@ const MainStack = createDrawerNavigator({
     },
     Products: {
         screen: createStackWithNotifIcon({Products, ProductDetails, AddProduct}),
+        navigationOptions: {
+            drawerLabel: 'Products',
+            // drawerIcon: () => (
+            //     <Entypo name="home" size={20} color="#fff" />
+            // ),
+        },
+    },
+    MasterProducts: {
+        screen: createStackWithNotifIcon({MasterProducts}),
         navigationOptions: {
             drawerLabel: 'Products',
             // drawerIcon: () => (

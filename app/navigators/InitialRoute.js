@@ -9,6 +9,7 @@ import UserService from '../services/user.service';
 import CustomerService from '../services/customers.service';
 import NotificationService from "../services/notification.service";
 import UserActions from '../reducers/user/user.action';
+import { getLocationPermission } from '../utils/permissions';
 
 class InitialRoute extends React.Component<> {
     constructor(props){
@@ -24,6 +25,8 @@ class InitialRoute extends React.Component<> {
         } else {
             navigation.navigate('Stores');
         }
+
+        getLocationPermission().catch(() => {});
 
     }
 

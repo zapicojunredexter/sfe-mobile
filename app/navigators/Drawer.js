@@ -16,6 +16,10 @@ const screens = {
         'OrderHistory' : true,
         'Stores' : true,
     },
+    'none' : {
+        'Stores' : true,
+        'MasterProducts' : true,
+    }
 };
 
 class DrawerComponent extends React.PureComponent<> {
@@ -25,7 +29,8 @@ class DrawerComponent extends React.PureComponent<> {
 
     render() {
         const { items, userType, userId, userName } = this.props;
-        const filteredItems = (userType) ? items.filter((item, index) => screens[userType][item.key]) : [];
+        const _userType = userType || 'none';
+        const filteredItems = (_userType) ? items.filter((item, index) => screens[_userType][item.key]) : [];
         const isLoggedIn = userId;
         return (
             <ScrollView>
